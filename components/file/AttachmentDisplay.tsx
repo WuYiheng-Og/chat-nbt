@@ -24,14 +24,11 @@ const formatFileSize = (size: number) => {
 
 const AttachmentDisplay: React.FC<AttachmentDisplayProps> = ({ attachmentMetaInfoList }) => { 
     
-    if (!attachmentMetaInfoList || attachmentMetaInfoList.length === 0) {
-        return null;
-    }
     const [presignedUrls, setPresignedUrls] = useState<{ [key: string]: string }>({});
     useEffect(()=>{
         const fetchUrls = async()=>{
             const urls: { [key: string]: string } = {};
-                for (const attachment of attachmentMetaInfoList) {
+                for (const attachment of attachmentMetaInfoList ?? []) {
                     const response = await fetch(`/api/get-presigned-url?key=${attachment.key}`);
                     const url = await response.text();
                     urls[attachment.key] = url;
@@ -40,6 +37,10 @@ const AttachmentDisplay: React.FC<AttachmentDisplayProps> = ({ attachmentMetaInf
             }
             fetchUrls();
     }, [attachmentMetaInfoList]);
+
+    if (!attachmentMetaInfoList || attachmentMetaInfoList.length === 0) {
+        return null;
+    }
 
     return (
         <div className="mt-4"> 

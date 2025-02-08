@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { IncomingForm } from 'formidable';
+import formidable, { IncomingForm } from 'formidable';
 import OpenAI from 'openai' 
 import fs from 'fs' 
 import OSS from 'ali-oss'
@@ -57,7 +57,7 @@ export default async (
             const formatFiles: FormattedFile[] = [];  
 
             // 按顺序执行异步操作
-            async function processFilesSequentially(files:any) {
+            async function processFilesSequentially(files:formidable.File[]) {
                 for (const file of files) {
                     try {
                         // 获取文件后缀
