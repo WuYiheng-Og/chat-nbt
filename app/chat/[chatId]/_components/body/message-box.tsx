@@ -9,10 +9,10 @@ interface MessageBoxProps {
     userImageUrl?: string;
 }
 
-export const MessageBox = React.memo(({
+export function MessageBox ({
     message,
     userImageUrl
-}: MessageBoxProps) => {
+}: MessageBoxProps) {
     
     // 如果 role 是 system，直接返回 null，不渲染
     if (message.role === "system") {
@@ -45,4 +45,4 @@ export const MessageBox = React.memo(({
             </div>
         </div>
     )
-});
+};
