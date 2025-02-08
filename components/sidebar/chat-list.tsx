@@ -7,9 +7,15 @@ import { useParams } from 'next/navigation';
 import { ChatBox } from './chat-box';
 
 export const ChatList = () => {
-    const chats = useQuery(api.chats.list || []);
+    // 获取聊天列表数据
+    const chats = useQuery(api.chats.list) || [];
 
-    const { chatId } = useParams<{ chatId: Id<"chats"> }>();
+    // 获取路由参数
+    const params = useParams<{ chatId: Id<"chats"> }>();
+    
+    // 安全地获取 chatId，如果 params 为 null 则 chatId 为 undefined
+    const chatId = params?.chatId;
+
     if (chats === undefined) {
         return <div>Loading...</div>
     }

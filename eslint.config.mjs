@@ -12,6 +12,7 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
+    "files": ["**/pages/api/moonshot_uploadfiles.ts"],
     rules: {
       // 禁用 @typescript-eslint/no-unused-vars 规则,vercel部署报错
       "@typescript-eslint/no-unused-vars": "off"

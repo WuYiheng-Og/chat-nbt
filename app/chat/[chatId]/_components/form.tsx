@@ -4,8 +4,8 @@ import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useAction, useQuery } from "convex/react";
-import { Circle, CircleStop, Send } from "lucide-react";
-import { use, useState } from "react"; 
+import { CircleStop, Send } from "lucide-react";
+import {  useState } from "react"; 
 // 文件元数据
 type FormattedFile = {
     key: string,// 通过key可以索引url

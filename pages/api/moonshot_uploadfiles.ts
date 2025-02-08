@@ -81,11 +81,13 @@ export default async (
                             });
                         });
 
-                        try {
+                        try {  
                             // 发送请求[文件上传到kimi解析]
                             const aiFile = await kimiClient.files.create({
-                                file: fs.createReadStream(tempFilePath),
-                                purpose: "file-extract" // TODO 暂时没解决：这里报错是因为 openai 的 purpose 没有 file-extract，但是 kimi 设置了这个，所以被 eslint 检查报错。
+                                file: fs.createReadStream(tempFilePath), 
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                // purpose: "file-extract" // TODO 暂时没解决：这里报错是因为 openai 的 purpose 没有 file-extract，但是 kimi 设置了这个，所以被 eslint 检查报错。
+                                purpose: 'vision'
                             }); 
                             console.log('文件上传成功:', aiFile.id);
                             // 文件备份到阿里云，便于网络访问
@@ -95,8 +97,7 @@ export default async (
                                 name: fileName,
                                 type: fileType,
                                 size: fileSize,
-                            };
-                            
+                            }; 
                             formatFiles.push(formattedFile);
                         } catch (error) {
                             // 处理错误
