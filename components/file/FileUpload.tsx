@@ -38,8 +38,8 @@ export const FileUpload = ({ onFileSelect, onFileUploading }: FileUploadProps) =
         console.log('上传文件给api', files);
         // 将file存入formData，以便序列化传入。因为File类型是二进制文件，无法直接序列化
         const formData = new FormData();
-        files.forEach((file ) => formData.append(`$`, file) );
-
+        files.forEach((file, index) => formData.append(`${index}`, file) );
+        
         const response = await fetch("/api/moonshot_uploadfiles", {
             method: "POST", 
             body: formData
