@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Markdown from "./markdown";
 import { Doc } from "@/convex/_generated/dataModel";
-import AttachmentDisplay from "@/components/file/AttachmentDisplay";
+import AttachmentDisplay from "@/components/files/AttachmentDisplay";
 import React from "react";
 
 interface MessageBoxProps {

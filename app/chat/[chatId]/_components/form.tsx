@@ -1,11 +1,12 @@
-import { AttachmentPreview } from "@/components/file/AttachmentPreview";
-import { FileUpload } from "@/components/file/FileUpload";
+import { AttachmentPreview } from "@/components/files/AttachmentPreview";
+import { FileUpload } from "@/components/files/FileUpload";
 import { Input } from "@/components/ui/input";
+import sendMessage from "@/controller/chat";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useAction, useQuery } from "convex/react";
 import { CircleStop, Send } from "lucide-react";
-import {  useState } from "react"; 
+import {  useRef, useState } from "react"; 
 // 文件元数据
 type FormattedFile = {
     key: string,// 通过key可以索引url
@@ -19,13 +20,15 @@ interface FormProps {
 // 输入框，与大模型对话请求对接。
 export const Form = ({ chatId }: FormProps) => {
     const chat = useQuery(api.chats.get, { id: chatId });
-    const sendMessage = useAction(api.messages.submit);
+    // const sendMessage = useAction(api.messages.submit1);
 
     const [message, setMessage] = useState<string>("");
     const [attachments, setAttachments] = useState<File[]>([]);
     const [attachmentMetaInfoList, setAttachmentMetaInfoList] = useState<FormattedFile[]>([]);// 文件元数据
     const [uploadPending, setUploadPending] = useState(false);// true表示正在上传，否则不在上传 
     const [sendPending, setSendPending] = useState(false);// true表示正在生成回答
+    // TODO 下面这个中断暂时没有实现
+    const abortControllerRef = useRef<AbortController | null>(null);
     if (chat === undefined) {
         return null;
     }
@@ -52,11 +55,20 @@ export const Form = ({ chatId }: FormProps) => {
         setAttachments(prev => prev.filter((_, i) => i !== index));
     };
 
+    // 发送消息给大语言模型
     const handleSendMessage = async () => {
+        
         if (message === "") return;
         const temp = message;
         setMessage("");
         setSendPending(true); // 开始发送消息，设置 sendPending 为 true
+        
+
+        // 创建 AbortController 实例
+        const abortController = new AbortController();
+        abortControllerRef.current = abortController;
+        console.log('发送消息！');
+        
         await sendMessage({
             role: "user",
             content: temp,
@@ -64,6 +76,16 @@ export const Form = ({ chatId }: FormProps) => {
             attachmentMetaInfoList: attachmentMetaInfoList
         });
         setSendPending(false); // 消息发送完成，设置 sendPending 为 false
+    }
+
+    // 中断流式传输
+    const stopStream = () => {
+        if (abortControllerRef.current) {
+            // 调用 abort 方法中断请求
+            abortControllerRef.current.abort();
+            abortControllerRef.current = null;
+            setSendPending(false);// 消息发送完成，设置 sendPending 为 false
+        }
     }
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -92,7 +114,7 @@ export const Form = ({ chatId }: FormProps) => {
             <div className="relative right-16 flex items-center gap-x-2">
             <FileUpload onFileSelect={handleFileSelect} onFileUploading={handleFileUploading} />
                     {sendPending? (
-                        <CircleStop className="w-5 h-5 cursor-pointer"/>
+                        <CircleStop className="w-5 h-5 cursor-pointer" onClick={stopStream}/>
 
                     ): (
                         <Send  

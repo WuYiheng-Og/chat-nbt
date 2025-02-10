@@ -44,11 +44,12 @@ export async function POST(
             for (const file of formData.values()) {
                 if(file instanceof File) {
                     // 发送请求[文件上传到kimi解析]
+                    // 【注意哈，如果这里报错400invalid_request_error，把purpose: vision改成file-extract即可】
                     const aiFile = await kimiClient.files.create({
                         file: file,
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                        // purpose: "file-extract" // TODO 暂时没解决：这里报错是因为 openai 的 purpose 没有 file-extract，但是 kimi 设置了这个，所以被 eslint 检查报错。
-                        purpose: 'vision'
+                        purpose: "file-extract" // TODO 暂时没解决：这里报错是因为 openai 的 purpose 没有 file-extract，但是 kimi 设置了这个，所以被 eslint 检查报错。
+                        // purpose: 'vision'
                     });  
                     // 文件备份到阿里云，便于网络访问 
                     const buffer = await fileToBuffer(file);
@@ -66,4 +67,22 @@ export async function POST(
             console.log(error);
             return NextResponse.json({ message: '无法解析内容' }, { status: 500 });
         }
+}
+
+// 查看上传文件解析的内容
+export async function GET(req: NextRequest) {
+        // 获取路径携带参数
+        const { searchParams } = new URL(req.url);
+        const fileKey = searchParams.get('fileKey');
+    try {
+        if (!fileKey) {
+            return NextResponse.json({ error: '文件传入Key出错' }, { status: 400 });
+        }
+        const fileResponse = await kimiClient.files.content(fileKey);
+        const fileContent = await fileResponse.text();
+        return NextResponse.json({ fileContent }, { status: 200 });
+    } catch (error) {
+        console.error('Error getting file content:', error);
+        return NextResponse.json({ error: '无法获取文件内容' }, { status: 500 });
+    }
 }

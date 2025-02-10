@@ -40,7 +40,7 @@ export const FileUpload = ({ onFileSelect, onFileUploading }: FileUploadProps) =
         const formData = new FormData();
         files.forEach((file, index) => formData.append(`${index}`, file) );
         
-        const response = await fetch("/api/moonshot_uploadfiles", {
+        const response = await fetch("/api/moonshot/files", {
             method: "POST", 
             body: formData
           })

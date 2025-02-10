@@ -29,7 +29,7 @@ const AttachmentDisplay: React.FC<AttachmentDisplayProps> = ({ attachmentMetaInf
         const fetchUrls = async()=>{
             const urls: { [key: string]: string } = {};
                 for (const attachment of attachmentMetaInfoList ?? []) {
-                    const response = await fetch(`/api/get-presigned-url?key=${attachment.key}`);
+                    const response = await fetch(`/api/system/files?key=${attachment.key}`);
                     const url = await response.text();
                     urls[attachment.key] = url;
                 }
