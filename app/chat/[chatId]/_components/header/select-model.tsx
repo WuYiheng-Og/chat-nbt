@@ -34,7 +34,7 @@ export const SelectModel = () => {
 
     // 对象?.方法，先看对象存不存在，如果存在，再访问方法。
     // 前者？？后者。 前者如果为空，结果返回后者，否则为前者。
-    const isSubscribed = currentUser?.endsOn ?? 0 > Date.now();
+    // const isSubscribed = currentUser?.endsOn ?? 0 > Date.now();
 
     const GPTVersionText = currentUser.model === GPTModel.
         GPT3 ? "3.5" : "4.0";
@@ -47,11 +47,11 @@ export const SelectModel = () => {
             return;
         }
         // if gpt-4
-        if (isSubscribed) {
-            selectGPT({ model });
-        } else {
-            // setOpenUpgradeModel(true);
-        }
+        // if (isSubscribed) {
+        //     selectGPT({ model });
+        // } else {
+        //     // setOpenUpgradeModel(true);
+        // }
         setOpenSelect(!openSelect);
     }
 
@@ -70,7 +70,7 @@ export const SelectModel = () => {
                     onClick={toggleOpen}
                     className="flex space-x-2 font-semibolditems-center"
                 >
-                    <p>ChatGPT</p>
+                    <p>Kimi</p>
                     <p className="text-white/50">{GPTVersionText}</p>
                     <ChevronDown className="text-white/50 w-5" />
                 </PopoverTrigger>
@@ -82,8 +82,8 @@ export const SelectModel = () => {
                     >
                         <Zap className="w-6 h-6" />
                         <div className="w-full">
-                            <p className="font-normal">GPT 3.5</p>
-                            <p className="text-white/70">Great for everday tasks.</p>
+                            <p className="font-normal">Kimi</p>
+                            <p className="text-white/70">月之暗面大语言模型.</p>
                         </div>
                         <Checkbox id="item1" checked={currentUser.model === GPTModel.GPT3} />
                     </div>
@@ -93,15 +93,15 @@ export const SelectModel = () => {
                     >
                         <Sparkles className="w-6 h-6" />
                         <div className="w-full">
-                            <p className="font-normal">GPT 4.0</p>
-                            <p className="text-white/70">Our smartest and best model.</p>
-                            {!isSubscribed &&
+                            <p className="font-normal">Coze</p>
+                            <p className="text-white/70">字节跳动大语言模型.</p>
+                            {/* {!isSubscribed &&
                                 <div className="w-full p-2 rounded-lg text-white
                                 text-xs text-center font-normal cursor-pointer
                                 bg-purple-500 active:bg-purple-700 mt-1.5">
                                     Upgrade to plus
                                 </div>
-                            }
+                            } */}
                         </div>
                         <Checkbox id="item2" checked={currentUser.model === GPTModel.GPT4} />
 

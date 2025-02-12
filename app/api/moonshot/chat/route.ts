@@ -39,9 +39,12 @@ export async function POST(req: NextRequest) {
         const readableStream = new ReadableStream({
             async start(controller) {
                 for await (const chunk of stream) {
+                    // console.log(chunk.choices[0].delta.content);
                     // 将每个数据块转换为字符串并添加到流中
-                    const data = `data: ${JSON.stringify(chunk)}\n\n`;
-                    controller.enqueue(new TextEncoder().encode(data));
+                    if (chunk.choices[0].delta.content !== undefined){
+                        const data = `${chunk.choices[0].delta.content}\n\n`;
+                        controller.enqueue(new TextEncoder().encode(data));
+                    }
                 }
                 // 关闭流
                 controller.close();

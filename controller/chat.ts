@@ -71,9 +71,9 @@ export default async function sendMessage (args: sendMessageProps)  {
     try {
         console.log('开始请求大模型。。。');
         
-        try {
+        // try {
             // TODO cozeapi 调用
-            const response = await fetch('/api/moonshot/chat', {
+            const response = await fetch('/api/coze/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -82,12 +82,12 @@ export default async function sendMessage (args: sendMessageProps)  {
             });
             console.log(response);
             
-        } catch (error) {
+        // } catch (error) {
 
-            console.log('出错啦！！！！',error);
+        //     console.log('出错啦！！！！',error);
             
-        }
-        return
+        // }
+        // return
         if (!response.ok) {
             console.log(response);
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -109,22 +109,17 @@ export default async function sendMessage (args: sendMessageProps)  {
             }
             // 检查 readResult 是否包含 value 属性
             if (readResult && 'value' in readResult) {
+                
                 const chunk = decoder.decode(readResult.value);
+                console.log(chunk);
                 const lines = chunk.split('\n\n');
                 for (const line of lines) {
-                    if (line.startsWith('data: ')) {
-                        const part = JSON.parse(line.slice(6));
-                        if (part.choices[0].delta.content === null) {
-                            throw new Error("OpenAI completion is null");
-                        }
-                        if (part.choices[0].delta.content !== undefined) {
-                            fullResponse += part.choices[0].delta.content;
-                            await fetchMutation(api.messages.update,{
-                            messageId: newAssistantMessageId,
-                            content: fullResponse
-                        })
-                        }
-                    }
+                    console.log(line);
+                    fullResponse+=line;
+                    await fetchMutation(api.messages.update,{
+                        messageId: newAssistantMessageId,
+                        content: fullResponse
+                    })
                 }
             }
         }
