@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import sendMessage from "@/controller/chat";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useAction, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { CircleStop, Send } from "lucide-react";
 import {  useRef, useState } from "react"; 
 // 文件元数据

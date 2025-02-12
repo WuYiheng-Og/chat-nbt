@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'; 
+import Image from 'next/image';
 
 // 定义附件元信息的类型
 type FormattedFile = {
@@ -50,7 +51,7 @@ const AttachmentDisplay: React.FC<AttachmentDisplayProps> = ({ attachmentMetaInf
                         key={index}
                         className="bg-white p-2 rounded-md shadow-md flex flex-col items-center"
                     >
-                        <img
+                        <Image
                             src={presignedUrls[attachment.key]}
                             alt={attachment.name}
                             className="max-w-full max-h-48 object-contain rounded-lg mb-2"

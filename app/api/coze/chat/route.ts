@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CozeAPI, COZE_CN_BASE_URL,RoleType, ChatEventType,ChatStatus, StreamChatData } from '@coze/api';
+import { CozeAPI, COZE_CN_BASE_URL,RoleType, ChatEventType} from '@coze/api';
 
 const cozeClient = new CozeAPI({
     token: process.env.COZE_API_KEY!,
