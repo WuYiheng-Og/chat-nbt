@@ -21,14 +21,14 @@ interface FormProps {
 export const Form = ({ chatId }: FormProps) => {
     const chat = useQuery(api.chats.get, { id: chatId });
     const user = useQuery(api.users.currentUser, {});
-    // const sendMessage = useAction(api.messages.submit1);
 
     const [message, setMessage] = useState<string>("");
     const [attachments, setAttachments] = useState<File[]>([]);
     const [attachmentMetaInfoList, setAttachmentMetaInfoList] = useState<FormattedFile[]>([]);// 文件元数据
     const [uploadPending, setUploadPending] = useState(false);// true表示正在上传，否则不在上传 
     const [sendPending, setSendPending] = useState(false);// true表示正在生成回答
-    // TODO 下面这个中断暂时没有实现
+    
+    // 用于终止聊天
     const abortControllerRef = useRef<AbortController | null>(null);
     if (chat === undefined) {
         return null;
@@ -76,7 +76,7 @@ export const Form = ({ chatId }: FormProps) => {
             chatId: chat._id,
             attachmentMetaInfoList: attachmentMetaInfoList,
             curUser: user!
-        });
+        }, abortController.signal);
         setSendPending(false); // 消息发送完成，设置 sendPending 为 false
     }
 

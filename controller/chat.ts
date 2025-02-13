@@ -24,8 +24,7 @@ interface sendMessageProps {
     attachmentMetaInfoList?: FormattedFile[];
     curUser: Doc<'users'>; // 当前用户信息
 }
-export default async function sendMessage (args: sendMessageProps)  {
-    console.log(args);
+export default async function sendMessage (args: sendMessageProps, signal: AbortSignal)  {
 
     // 检查是否有附件
     if(args.attachmentMetaInfoList) {
@@ -66,14 +65,15 @@ export default async function sendMessage (args: sendMessageProps)  {
     })); 
 
     try {
-        const GPTVersion = args.curUser.model === GPTModel.KIMI ? "moonshot" : "Coze";
+        const GPTVersion = args.curUser.model === GPTModel.KIMI ? "moonshot" : "coze";
         console.log('开始请求大模型:',GPTVersion);
         const response = await fetch(`/api/${GPTVersion}/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ formattedMessages })
+            body: JSON.stringify({ formattedMessages }),
+            signal
         });
         if (!response.ok) {
             console.log(response);
@@ -96,12 +96,10 @@ export default async function sendMessage (args: sendMessageProps)  {
             }
             // 检查 readResult 是否包含 value 属性
             if (readResult && 'value' in readResult) {
-                
                 const chunk = decoder.decode(readResult.value);
                 console.log(chunk);
                 const lines = chunk.split('\n\n');
                 for (const line of lines) {
-                    console.log(line);
                     fullResponse+=line;
                     await fetchMutation(api.messages.update,{
                         messageId: newAssistantMessageId,
@@ -112,7 +110,7 @@ export default async function sendMessage (args: sendMessageProps)  {
         }
     } catch (error) {
         console.log(error);
-        throw new Error(`HTTP error! status: ${error}`);
+        // throw new Error(`对话出错! status: ${error}`);
     }
 }
 
@@ -121,7 +119,6 @@ async function parse_files(files: FormattedFile[]) {
     // 对每个文件路径，我们都会抽取文件内容，最后生成一个 role 为 system 的 message，并加入
     // 到最终返回的 messages 列表中。
     for (const file of files) {
-        
         const response = await fetch(`/api/moonshot/files?key=${file.key}`)
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -137,3 +134,8 @@ async function parse_files(files: FormattedFile[]) {
     } 
     return messages
 }
+
+// 
+// async function parse_files_coze(params:type) {
+    
+// }

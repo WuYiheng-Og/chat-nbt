@@ -38,15 +38,23 @@ export const FileUpload = ({ onFileSelect, onFileUploading }: FileUploadProps) =
         console.log('上传文件给api', files);
         // 将file存入formData，以便序列化传入。因为File类型是二进制文件，无法直接序列化
         const formData = new FormData();
-        files.forEach((file, index) => formData.append(`${index}`, file) );
         
-        const response = await fetch("/api/moonshot/files", {
+        files.forEach((file,index) => {
+            formData.append(`file`, file);
+            formData.append(`url`, URL.createObjectURL(file));// 临时文件
+        } );
+        
+        const response = await fetch("/api/coze/files", {
             method: "POST", 
             body: formData
           })
     
           const res = await response.json()
           console.log('上传完成，结束加载，formatFiles',res.formatFiles);
+          // 释放内存
+          formData.forEach((value, key) => {
+            if(key === 'url') URL.revokeObjectURL(value as string);
+        });
           // 将文件传递给父组件
           
         onFileUploading(false, res.formatFiles);// 结束加载
