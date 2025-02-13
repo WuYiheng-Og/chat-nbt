@@ -25,7 +25,6 @@ export const create = mutation({
             userId: user._id,
             title: "New chat"
         });
-
         return chatId;
     }
 });

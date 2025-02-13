@@ -3,15 +3,18 @@ import Markdown from "./markdown";
 import { Doc } from "@/convex/_generated/dataModel";
 import AttachmentDisplay from "@/components/files/AttachmentDisplay";
 import React from "react";
+import { GPTModel } from "@/lib/types";
 
 interface MessageBoxProps {
     message: Doc<"messages">;
     userImageUrl?: string; 
+    model?: string;
 }
 
 function MessageBox ({
     message,
-    userImageUrl 
+    userImageUrl,
+    model
 }: MessageBoxProps) {
     
     // 如果 role 是 system，直接返回 null，不渲染
@@ -20,7 +23,7 @@ function MessageBox ({
     } 
 
     const nameString = message.role === "user" ? "You" : "TalkGPT";
-    const imageUrl = message.role === "user" ? userImageUrl : "/logo.svg";
+    const imageUrl = message.role === "user" ? userImageUrl : (model===GPTModel.KIMI?'/kimi_log.svg':'/coze_log.svg');
     const hasAttachments = message.attachmentMetaInfoList && message.attachmentMetaInfoList.length > 0; 
     return (
         <div
@@ -46,15 +49,17 @@ function MessageBox ({
 };
 
 // 自定义比较函数
-const arePropsEqual = (prevProps: MessageBoxProps, nextProps: MessageBoxProps) => {
+const arePropsEqual = (prevProps: MessageBoxProps, nextProps: MessageBoxProps ) => {
     // 用户的肯定不再次渲染了
     if(nextProps.message.role==='user') return true;
     return (
+        
         prevProps.message._id === nextProps.message._id &&
-        prevProps.message.content === nextProps.message.content
+        prevProps.message.content === nextProps.message.content &&
+        prevProps.model === nextProps.model
     )
 };
 // 使用 React.memo 包裹 MessageBox 组件【减少不必要的渲染】
-const MemoizedMessageBox = React.memo(MessageBox, arePropsEqual);
+const MemoizedMessageBox = React.memo(MessageBox, arePropsEqual );
 
 export { MemoizedMessageBox as MessageBox };

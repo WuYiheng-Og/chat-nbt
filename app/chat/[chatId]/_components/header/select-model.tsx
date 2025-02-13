@@ -10,7 +10,7 @@ import { ChevronDown, Sparkles, Zap } from "lucide-react";
 import { useState } from "react";
 import { GPTModel } from "@/lib/types";
 import { Checkbox } from "@/components/ui/checkbox";
-// import { UpgradeModel } from "./upgrade-model";
+
 
 // 选择对话的模型
 export const SelectModel = () => {
@@ -19,7 +19,7 @@ export const SelectModel = () => {
     const {
         mutate: selectGPT,
         // pending: selectGPTPending,
-    } = useApiMutation(api.users.selectGPT);
+    } = useApiMutation(api.users.selectModel);
 
     const [openSelect, setOpenSelect] = useState(false);
     // const [openUpgradeModel, setOpenUpgradeModel] = useState(false);
@@ -37,21 +37,11 @@ export const SelectModel = () => {
     // const isSubscribed = currentUser?.endsOn ?? 0 > Date.now();
 
     const GPTVersionText = currentUser.model === GPTModel.
-        GPT3 ? "3.5" : "4.0";
+        KIMI ? "Kimi" : "Coze";
 
     const handleClick = (model: GPTModel) => {
-        //  if gpt-3, just select and return
-        if (model === GPTModel.GPT3) {
-            selectGPT({ model });
-            setOpenSelect(!openSelect);
-            return;
-        }
-        // if gpt-4
-        // if (isSubscribed) {
-        //     selectGPT({ model });
-        // } else {
-        //     // setOpenUpgradeModel(true);
-        // }
+        // 更改模型
+        selectGPT({ model });
         setOpenSelect(!openSelect);
     }
 
@@ -70,14 +60,13 @@ export const SelectModel = () => {
                     onClick={toggleOpen}
                     className="flex space-x-2 font-semibolditems-center"
                 >
-                    <p>Kimi</p>
-                    <p className="text-white/50">{GPTVersionText}</p>
+                    <p>{GPTVersionText}</p>
                     <ChevronDown className="text-white/50 w-5" />
                 </PopoverTrigger>
                 <PopoverContent className="flex flex-col border-0 bg-neutral-700 text-white p-3 space-y-4">
 
                     <div
-                        onClick={() => handleClick(GPTModel.GPT3)}
+                        onClick={() => handleClick(GPTModel.KIMI)}
                         className="flex items-center text-start cursor-pointer rounded-md justify-start space-x-2 p-2 w-full h-full hover:bg-neutral-600"
                     >
                         <Zap className="w-6 h-6" />
@@ -85,10 +74,10 @@ export const SelectModel = () => {
                             <p className="font-normal">Kimi</p>
                             <p className="text-white/70">月之暗面大语言模型.</p>
                         </div>
-                        <Checkbox id="item1" checked={currentUser.model === GPTModel.GPT3} />
+                        <Checkbox id="item1" checked={currentUser.model === GPTModel.KIMI} />
                     </div>
                     <div
-                        onClick={() => handleClick(GPTModel.GPT4)}
+                        onClick={() => handleClick(GPTModel.COZE)}
                         className="flex items-center text-start cursor-pointer rounded-md justify-start space-x-2 p-2 w-full h-full hover:bg-neutral-600"
                     >
                         <Sparkles className="w-6 h-6" />
@@ -103,7 +92,7 @@ export const SelectModel = () => {
                                 </div>
                             } */}
                         </div>
-                        <Checkbox id="item2" checked={currentUser.model === GPTModel.GPT4} />
+                        <Checkbox id="item2" checked={currentUser.model === GPTModel.COZE} />
 
                     </div>
                 </PopoverContent>

@@ -20,6 +20,7 @@ interface FormProps {
 // 输入框，与大模型对话请求对接。
 export const Form = ({ chatId }: FormProps) => {
     const chat = useQuery(api.chats.get, { id: chatId });
+    const user = useQuery(api.users.currentUser, {});
     // const sendMessage = useAction(api.messages.submit1);
 
     const [message, setMessage] = useState<string>("");
@@ -73,7 +74,8 @@ export const Form = ({ chatId }: FormProps) => {
             role: "user",
             content: temp,
             chatId: chat._id,
-            attachmentMetaInfoList: attachmentMetaInfoList
+            attachmentMetaInfoList: attachmentMetaInfoList,
+            curUser: user!
         });
         setSendPending(false); // 消息发送完成，设置 sendPending 为 false
     }

@@ -4,8 +4,12 @@ import { v } from 'convex/values';
 export default defineSchema({
     users: defineTable({
         tokenIdentifier: v.string(),
-        model: v.union(v.literal("gpt-3.5-turbo-1106"), v.literal
-            ("gpt-4-0125-preview")),
+        model: 
+            v.union(v.literal("kimi"), 
+            v.literal("coze"),
+            v.literal("gpt-3.5-turbo-1106"),
+            v.literal("gpt-4-0125-preview")),
+        
         endsOn: v.optional(v.number()),// 用户订阅结束的时间 
         subscriptionId: v.optional(v.string())
     })

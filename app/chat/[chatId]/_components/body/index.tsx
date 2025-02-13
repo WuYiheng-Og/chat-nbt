@@ -3,7 +3,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { MessageBox } from "./message-box";
 import React from "react";
 
@@ -12,11 +12,9 @@ interface BodyProps {
 }
 
 export const Body = ({ chatId }: BodyProps) => {
-    // 使用 useMemo 包裹 messages 的初始化
-    const messages = useMemo(() => {
-        return useQuery(api.messages.list, { chatId }) || [];
-    }, [chatId]);
-    const { user } = useUser();
+    const messages = useQuery(api.messages.list, { chatId }) || [];
+    const { user } = useUser(); // 从clerk获取的
+    const curUser = useQuery(api.users.currentUser, {}); // 数据库存储的
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -39,6 +37,7 @@ export const Body = ({ chatId }: BodyProps) => {
                             key={message._id}
                             message={message}
                             userImageUrl={user?.imageUrl}
+                            model={curUser?.model}
                         />
                     ))}
                 </div>

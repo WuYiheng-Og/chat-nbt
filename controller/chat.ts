@@ -1,5 +1,6 @@
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
+import { Doc, Id } from "@/convex/_generated/dataModel";
+import { GPTModel } from "@/lib/types";
 import {fetchMutation, fetchQuery} from 'convex/nextjs'
 
 // 文件元数据
@@ -12,7 +13,7 @@ type FormattedFile = {
 type MessageType = {
     role: "system" | "user" | "assistant";
     content: string;
-    metaInfo: FormattedFile
+    metaInfo: FormattedFile,
 };
 
 
@@ -21,14 +22,10 @@ interface sendMessageProps {
     content: string;
     chatId: Id<"chats">;
     attachmentMetaInfoList?: FormattedFile[];
+    curUser: Doc<'users'>; // 当前用户信息
 }
 export default async function sendMessage (args: sendMessageProps)  {
     console.log(args);
-    // 先查询当前发送消息对象是否存在
-    // const curUser = await fetchQuery(api.users.currentUser, {});
-    // if (curUser === null){
-    //     throw new Error("User not found");
-    // }
 
     // 检查是否有附件
     if(args.attachmentMetaInfoList) {
@@ -69,25 +66,15 @@ export default async function sendMessage (args: sendMessageProps)  {
     })); 
 
     try {
-        console.log('开始请求大模型。。。');
-        
-        // try {
-            // TODO cozeapi 调用
-            const response = await fetch('/api/coze/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ formattedMessages })
-            });
-            console.log(response);
-            
-        // } catch (error) {
-
-        //     console.log('出错啦！！！！',error);
-            
-        // }
-        // return
+        const GPTVersion = args.curUser.model === GPTModel.KIMI ? "moonshot" : "Coze";
+        console.log('开始请求大模型:',GPTVersion);
+        const response = await fetch(`/api/${GPTVersion}/chat`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ formattedMessages })
+        });
         if (!response.ok) {
             console.log(response);
             throw new Error(`HTTP error! status: ${response.status}`);
