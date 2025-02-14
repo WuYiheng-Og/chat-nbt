@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'; 
-import { CozeAPI, COZE_CN_BASE_URL, RoleType, ChatEventType } from '@coze/api';
+import { CozeAPI, COZE_CN_BASE_URL } from '@coze/api';
 import OSS from 'ali-oss';
 import fs from 'fs';
-import path, { dirname } from 'path';
+import path from 'path';
 
 export const config = {
     api: {
@@ -45,7 +45,6 @@ export async function POST(
     // 声明数组并指定元素类型
     const formatFiles: FormattedFile[] = [];  
     try { 
-        let index = 0;
         for (const file of formData.getAll('file')) {
             if (file instanceof File) {
                 // 生成唯一的文件名

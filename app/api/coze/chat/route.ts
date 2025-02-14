@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CozeAPI, COZE_CN_BASE_URL,RoleType, ChatEventType} from '@coze/api';
+import { CozeAPI, COZE_CN_BASE_URL, ChatEventType} from '@coze/api';
 import { COZE_BOT_ID } from '@/lib/types';
 
 const cozeClient = new CozeAPI({
@@ -17,10 +17,7 @@ export async function POST(req: NextRequest) {
         // 检查消息数据是否存在
         if (!formattedMessages) {
             return NextResponse.json({ error: 'Missing formattedMessages in request body' }, { status: 400 });
-        }
-        // 判断是否是多模态聊天
-        console.log(isMultiMode(formattedMessages)?'是多模态！':'不是多模态');
-        
+        } 
         // // 创建流式聊天完成请求
         const stream = await cozeClient.chat.stream({
             bot_id: COZE_BOT_ID!,
@@ -55,9 +52,4 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Failed to create chat completion stream' }, { status: 500 });
     }
 }
-
-function isMultiMode(object: any):boolean {
-    const checkObj = object.at(-1);
-    if(checkObj.content_type === 'object_string') return true;
-    else return false;
-}
+ 

@@ -34,7 +34,7 @@ export const FileUpload = ({ onFileSelect, onFileUploading, model }: FileUploadP
         console.log('上传文件给api', files);
         // 将file存入formData，以便序列化传入。因为File类型是二进制文件，无法直接序列化
         const formData = new FormData();
-        files.forEach((file,index) => {
+        files.forEach((file) => {
             formData.append(`file`, file);
         } );
         const GPTVersion = model === GPTModel.KIMI ? "moonshot" : "coze";

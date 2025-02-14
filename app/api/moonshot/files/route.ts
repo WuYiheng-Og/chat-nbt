@@ -48,8 +48,8 @@ export async function POST(
                     const aiFile = await kimiClient.files.create({
                         file: file,
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                        // purpose: "vision" // TODO 暂时没解决：这里报错是因为 openai 的 purpose 没有 file-extract，但是 kimi 设置了这个，所以被 eslint 检查报错。
-                        purpose: 'file-extract'
+                        purpose: "vision" // TODO 暂时没解决：这里报错是因为 openai 的 purpose 没有 file-extract，但是 kimi 设置了这个，所以被 eslint 检查报错。
+                        // purpose: 'file-extract'
                     });  
 
                     // 文件备份到阿里云，便于网络访问 
