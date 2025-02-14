@@ -36,6 +36,9 @@ export const Form = ({ chatId }: FormProps) => {
     if (chat === null) {
         return <div>Chat not found!</div>
     }
+    if (user === null) {
+        return <div>User not found!</div>
+    }
 
     // 设置文件加载状态
     const handleFileUploading = (uploadPending:boolean, attachmentMetaInfoList: FormattedFile[])=> {
@@ -114,7 +117,7 @@ export const Form = ({ chatId }: FormProps) => {
                 onKeyDown={handleKeyDown}
             /> 
             <div className="relative right-16 flex items-center gap-x-2">
-            <FileUpload onFileSelect={handleFileSelect} onFileUploading={handleFileUploading} />
+            <FileUpload onFileSelect={handleFileSelect} onFileUploading={handleFileUploading} model={user?user.model: 'kimi'}/>
                     {sendPending? (
                         <CircleStop className="w-5 h-5 cursor-pointer" onClick={stopStream}/>
 

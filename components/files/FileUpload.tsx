@@ -1,9 +1,11 @@
 import { Paperclip } from "lucide-react";
 import { useRef } from "react";
+import { GPTModel } from "@/lib/types";
 
 interface FileUploadProps {
     onFileSelect: (files: File[]) => void;
     onFileUploading: (uploadPending: boolean, attachmentMetaInfo: FormattedFile[])=> void;
+    model: string;
 } 
 // 文件元数据
 type FormattedFile = {
@@ -12,7 +14,7 @@ type FormattedFile = {
     type: string,
     size:number,
 }
-export const FileUpload = ({ onFileSelect, onFileUploading }: FileUploadProps) => {
+export const FileUpload = ({ onFileSelect, onFileUploading, model }: FileUploadProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleUpload = () => {
@@ -28,33 +30,21 @@ export const FileUpload = ({ onFileSelect, onFileUploading }: FileUploadProps) =
         onFileSelect(files); // 把文件传给父组件
 
         console.log('开始上传文件到Moonshot:'); 
-        // 模拟文件上传和解析
-        // setTimeout(()=>{
-        //     console.log('文件上传完成');
-        //     onFileUploading(false);// 结束加载
-        // },2000)
-        
         // 正式上传 
         console.log('上传文件给api', files);
         // 将file存入formData，以便序列化传入。因为File类型是二进制文件，无法直接序列化
         const formData = new FormData();
-        
         files.forEach((file,index) => {
             formData.append(`file`, file);
-            formData.append(`url`, URL.createObjectURL(file));// 临时文件
         } );
-        
-        const response = await fetch("/api/coze/files", {
+        const GPTVersion = model === GPTModel.KIMI ? "moonshot" : "coze";
+        const response = await fetch(`/api/${GPTVersion}/files`, {
             method: "POST", 
             body: formData
           })
     
           const res = await response.json()
-          console.log('上传完成，结束加载，formatFiles',res.formatFiles);
-          // 释放内存
-          formData.forEach((value, key) => {
-            if(key === 'url') URL.revokeObjectURL(value as string);
-        });
+          console.log('上传完成，结束加载，formatFiles',res.formatFiles); 
           // 将文件传递给父组件
           
         onFileUploading(false, res.formatFiles);// 结束加载

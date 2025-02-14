@@ -37,7 +37,7 @@ export async function POST(
     req: NextRequest, 
 )  { 
         const formData = await req.formData();
-        console.log('获取发送的消息：',formData);
+        console.log('kimi获取发送的消息：',formData);
         // 声明数组并指定元素类型
         const formatFiles: FormattedFile[] = [];  
         try {
@@ -48,9 +48,10 @@ export async function POST(
                     const aiFile = await kimiClient.files.create({
                         file: file,
                         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                        purpose: "vision" // TODO 暂时没解决：这里报错是因为 openai 的 purpose 没有 file-extract，但是 kimi 设置了这个，所以被 eslint 检查报错。
-                        // purpose: 'vision'
+                        // purpose: "vision" // TODO 暂时没解决：这里报错是因为 openai 的 purpose 没有 file-extract，但是 kimi 设置了这个，所以被 eslint 检查报错。
+                        purpose: 'file-extract'
                     });  
+
                     // 文件备份到阿里云，便于网络访问 
                     const buffer = await fileToBuffer(file);
                     await aliClient.put(`attachments/${aiFile.id}`, buffer); 
@@ -61,7 +62,9 @@ export async function POST(
                         size: file.size, 
                     })  
                     }
+
                 }
+                
             return NextResponse.json({ formatFiles: formatFiles }, { status: 200 });
         } catch (error) {
             console.log(error);
@@ -73,12 +76,13 @@ export async function POST(
 export async function GET(req: NextRequest) {
         // 获取路径携带参数
         const { searchParams } = new URL(req.url);
-        const fileKey = searchParams.get('fileKey');
+        const fileKey = searchParams.get('key');
     try {
         if (!fileKey) {
             return NextResponse.json({ error: '文件传入Key出错' }, { status: 400 });
         }
         const fileResponse = await kimiClient.files.content(fileKey);
+        
         const fileContent = await fileResponse.text();
         return NextResponse.json({ fileContent }, { status: 200 });
     } catch (error) {

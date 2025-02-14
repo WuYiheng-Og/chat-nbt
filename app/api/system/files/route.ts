@@ -18,7 +18,7 @@ export async function GET(req: NextRequest)  {
     const key = searchParams.get('key');
 
     if (typeof key!== 'string') {
-        return new NextResponse('Invalid key', { status: 400 }); 
+        return NextResponse.json({ error: 'Invalid key' }, { status: 400 });
     }
     const url = await aliClient.signatureUrl(`attachments/${key}`,{
         expires: 3600 // URL有效1h
@@ -26,9 +26,11 @@ export async function GET(req: NextRequest)  {
     if(url) {
         // console.log(url);
         // 使用构造函数返回纯文本响应
-        return new NextResponse(url, { status: 200 }); 
+        return NextResponse.json({ url: url }, { status: 200 });
+
     } else {
-        return new NextResponse('Error generating presigned URL', { status: 500 });
+        return NextResponse.json({ error: 'Error generating presigned URL' }, { status: 500 });
+
     }
 
 }
