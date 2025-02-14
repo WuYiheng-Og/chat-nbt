@@ -35,14 +35,14 @@ const Chat = ({ params }: ChatPageProps) => {
     return (
         <div className="bg-neutral-800 w-full h-full flex flex-col">
             <Header />
-            <div className="flex flex-col h-full w-full">
+            <div className="flex flex-col h-[calc(100vh-60px)]"> {/* 调整容器高度 */}
                 <div className="flex-1 overflow-y-auto">
-                    <Body chatId={chatId} /> 
+                    <Body chatId={chatId} />
                 </div>
-                <div className="w-full fixed bottom-0 bg-neutral-800">
+                <div className="w-full bg-neutral-800 pt-4"> {/* 移除 fixed 定位 */}
                     <Form chatId={chatId} />
                     <p className="w-full text-center text-xs text-neutral-400 my-2 lg:pr-[300px]">
-                        TalkGPT could make errors. Consider checking important information.
+                        内容由 AI 生成，请仔细甄别
                     </p>
                 </div>
             </div>
