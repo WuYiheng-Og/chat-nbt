@@ -35,6 +35,7 @@ function MessageBox ({
             </Avatar>
             <div className="max-w-[calc(80%)] px-2">
                 <h3 className="font-bold">{nameString}</h3>
+                {message.role!=="user"&&message.content==="" && (<div>Loading...</div>)}
                 <div className="flex flex-grow flex-col gap-3 gap-y-5">
                     <Markdown content={message.content} /> 
                     {hasAttachments && (
