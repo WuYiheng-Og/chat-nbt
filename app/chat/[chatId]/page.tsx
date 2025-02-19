@@ -20,6 +20,7 @@ const Chat = ({ params }: ChatPageProps) => {
     const resolvedParams = React.use(params);
     const chatId = resolvedParams?.chatId;
     const chat = useQuery(api.chats.get, { id: chatId });
+    const messages = useQuery(api.messages.list, { chatId }) || [];
     const router = useRouter();
 
     useEffect(() => {
@@ -32,7 +33,6 @@ const Chat = ({ params }: ChatPageProps) => {
         return null;
     }
 
-    const messages = useQuery(api.messages.list, { chatId }) || [];
     console.log(messages?.length)
 
     return (

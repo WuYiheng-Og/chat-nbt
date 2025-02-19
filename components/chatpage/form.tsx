@@ -5,8 +5,6 @@ import sendMessage from "@/controller/chat";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { useMutation } from "convex/react";
-import { useRouter } from "next/navigation";
 import { CircleStop, Send } from "lucide-react";
 import {  useRef, useState } from "react"; 
 // 文件元数据
