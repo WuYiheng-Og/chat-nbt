@@ -33,7 +33,6 @@ const Chat = ({ params }: ChatPageProps) => {
     }
 
     const messages = useQuery(api.messages.list, { chatId }) || [];
-    console.log(messages?.length)
 
     return (
         <div className="bg-neutral-800 w-full h-full flex flex-col">

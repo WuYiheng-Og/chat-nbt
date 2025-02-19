@@ -5,8 +5,6 @@ import sendMessage from "@/controller/chat";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { useMutation } from "convex/react";
-import { useRouter } from "next/navigation";
 import { CircleStop, Send } from "lucide-react";
 import {  useRef, useState } from "react"; 
 // 文件元数据
@@ -110,7 +108,7 @@ export const Form = ({ chatId }: FormProps) => {
                 attachments={attachments}
                 onRemove={handleRemoveAttachment}
             />
-            <div className="sm:px-12 md:px-64 2xl:px-96 w-full items-center justify-center">
+            <div className="px-2 sm:px-12 md:px-36 2xl:px-72 w-full items-center justify-center">
                 <div className="border-[2px] border-neutral-500 rounded-xl flex items-center justify-center hover:border-white/80">
                     <Input
                         placeholder="Message TalkGPT..."
