@@ -4,6 +4,7 @@ import { Doc } from "@/convex/_generated/dataModel";
 import AttachmentDisplay from "@/components/files/AttachmentDisplay";
 import React from "react";
 import { GPTModel } from "@/lib/types";
+import { LoaderCircle } from 'lucide-react';
 
 interface MessageBoxProps {
     message: Doc<"messages">;
@@ -34,8 +35,10 @@ function MessageBox ({
                 </AvatarFallback>
             </Avatar>
             <div className="max-w-[calc(80%)] px-2">
-                <h3 className="font-bold">{nameString}</h3>
-                {message.role!=="user"&&message.content==="" && (<div>Loading...</div>)}
+                <h3 className={`font-bold ${message.role === "user" ? "text-end" : "text-start"}`}>{nameString}</h3>
+                {message.role!=="user"&&message.content==="" && (<div>
+                    <LoaderCircle className="w-4 h-4 animate-spin" />
+                </div>)}
                 <div className="flex flex-grow flex-col gap-3 gap-y-5">
                     <Markdown content={message.content} /> 
                     {hasAttachments && (
