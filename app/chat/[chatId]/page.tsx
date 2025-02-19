@@ -20,6 +20,7 @@ const Chat = ({ params }: ChatPageProps) => {
     const resolvedParams = React.use(params);
     const chatId = resolvedParams?.chatId;
     const chat = useQuery(api.chats.get, { id: chatId });
+    const messages = useQuery(api.messages.list, { chatId }) || [];
     const router = useRouter();
 
     useEffect(() => {
@@ -31,8 +32,6 @@ const Chat = ({ params }: ChatPageProps) => {
     if (chat === null) {
         return null;
     }
-
-    const messages = useQuery(api.messages.list, { chatId }) || [];
 
     return (
         <div className="bg-neutral-800 w-full h-full flex flex-col">
