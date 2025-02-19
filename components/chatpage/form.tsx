@@ -5,6 +5,8 @@ import sendMessage from "@/controller/chat";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
+import { useMutation } from "convex/react";
+import { useRouter } from "next/navigation";
 import { CircleStop, Send } from "lucide-react";
 import {  useRef, useState } from "react"; 
 // 文件元数据
@@ -108,25 +110,27 @@ export const Form = ({ chatId }: FormProps) => {
                 attachments={attachments}
                 onRemove={handleRemoveAttachment}
             />
-            <div className="relative sm:px-12 md:px-52 lg:pr-[500px] 2xl:px-96 w-full bg-neutral-800 flex items-center">
-            <Input
-                placeholder="Message TalkGPT..."
-                className="border-[1px] border-neutral-500 ring-none rounded-xl bg-inherit text-neutral-200 placeholder:text-neutral-400 h-12"
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-            /> 
-            <div className="relative right-16 flex items-center gap-x-2">
-            <FileUpload onFileSelect={handleFileSelect} onFileUploading={handleFileUploading} model={user?user.model: 'kimi'}/>
-                    {sendPending? (
-                        <CircleStop className="w-5 h-5 cursor-pointer" onClick={stopStream}/>
+            <div className="sm:px-12 md:px-64 2xl:px-96 w-full items-center justify-center">
+                <div className="border-[2px] border-neutral-500 rounded-xl flex items-center justify-center hover:border-white/80">
+                    <Input
+                        placeholder="Message TalkGPT..."
+                        className="bg-inherit text-neutral-200 placeholder:text-neutral-400 h-12 focus:outline-none"
+                        value={message}
+                        onChange={e => setMessage(e.target.value)}
+                        onKeyDown={handleKeyDown}
+                    /> 
+                    <div className="flex items-center gap-x-2 pr-2">
+                        <FileUpload onFileSelect={handleFileSelect} onFileUploading={handleFileUploading} model={user?user.model: 'kimi'}/>
+                        {sendPending? (
+                            <CircleStop className="w-5 h-5 cursor-pointer" onClick={stopStream}/>
 
-                    ): (
-                        <Send  
-                        className={`w-5 h-5 cursor-pointer ${uploadPending? 'opacity-50 cursor-not-allowed' : 'hover:text-neutral-300'}`}
-                        onClick={handleSendMessage}
-                    />
-                    )} 
+                        ): (
+                            <Send  
+                            className={`w-5 h-5 cursor-pointer ${uploadPending? 'opacity-50 cursor-not-allowed' : 'hover:text-neutral-300'}`}
+                            onClick={handleSendMessage}
+                        />
+                        )} 
+                    </div>
                 </div>
             </div>
         </div>
