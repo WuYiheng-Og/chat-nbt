@@ -31,7 +31,7 @@ export const Body = ({ chatId }: BodyProps) => {
             <ScrollArea
                 className="h-full w-full flex-1"
             >
-                <div className="px-2 sm:px-12 md:px-36 2xl:px-72 w-full items-center justify-center">
+                <div className="px-2 sm:px-12 md:px-36 2xl:px-72 w-screen lg:w-full">
                     {messages.map((message) => (
                         <MessageBox
                             key={message._id}

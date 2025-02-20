@@ -4,7 +4,7 @@ import { MobileSidebar } from "@/components/mobile-sidebar"
 
 export const Header = () => {
     return (
-        <div className="flex h-[100px] justify-between p-5">
+        <div className="flex h-[100px] justify-between p-5 items-start">
             <MobileSidebar />
             {/* 用户选择对话模型 */}
             <SelectModel />
