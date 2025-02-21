@@ -1,7 +1,7 @@
 import { AttachmentPreview } from "@/components/files/AttachmentPreview";
 import { FileUpload } from "@/components/files/FileUpload";
 import { Input } from "@/components/ui/input";
-import sendMessage from "@/controller/chat";
+// import sendMessage from "@/controller/chat";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
@@ -44,9 +44,8 @@ export const Form = ({ chatId }: FormProps) => {
     const handleFileUploading = (uploadPending:boolean, attachmentMetaInfoList: FormattedFile[])=> {
         setUploadPending(uploadPending);
         if(attachmentMetaInfoList.length==0) return;
-        setAttachmentMetaInfoList(prev=>[...prev, ...attachmentMetaInfoList]);
+        setAttachmentMetaInfoList(()=>[...attachmentMetaInfoList]);
         // console.log('文件元数据获取：',attachmentMetaInfoList);
-        
     }
 
     // 选择文件后，将文件传递给父组件
@@ -66,6 +65,7 @@ export const Form = ({ chatId }: FormProps) => {
         const temp = message;
         setMessage("");
         setSendPending(true); // 开始发送消息，设置 sendPending 为 true
+        console.log('开始发送',sendPending);
         
 
         // 创建 AbortController 实例
@@ -73,22 +73,56 @@ export const Form = ({ chatId }: FormProps) => {
         abortControllerRef.current = abortController;
         console.log('发送消息！');
         
-        await sendMessage({
-            role: "user",
-            content: temp,
-            chatId: chat._id,
-            attachmentMetaInfoList: attachmentMetaInfoList,
-            curUser: user!
-        }, abortController.signal);
-        setSendPending(false); // 消息发送完成，设置 sendPending 为 false
+        // await sendMessage({
+        //     role: "user",
+        //     content: temp,
+        //     chatId: chat._id,
+        //     attachmentMetaInfoList: attachmentMetaInfoList,
+        //     curUser: user!
+        // }, abortController.signal);
+        fetch('/api/sendMessage', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                role: "user",
+                content: temp,
+                chatId: chat._id,
+                attachmentMetaInfoList: attachmentMetaInfoList,
+                curUser: user!
+            }),
+            signal: abortController.signal
+        })
+           .then(response => response.json())
+           .then(data => {
+                if (data.success) {
+                    // console.log('请求成功:');
+                    setSendPending(false); // 消息发送完成，设置 sendPending 为 false
+                } else {
+                    console.error('请求失败:', data.error);
+                }
+            })
+           .catch(error => {
+                // 如果是中止错误，不抛出异常
+                if (error.name === 'AbortError') {
+                    // console.log('请求已中止');
+                }
+                else {
+                    console.error('发生错误:', error);
+                }
+            });
     }
 
     // 中断流式传输
     const stopStream = () => {
+        
         if (abortControllerRef.current) {
             // 调用 abort 方法中断请求
             abortControllerRef.current.abort();
             abortControllerRef.current = null;
+            console.log('中断流式传输！！！');
+
             setSendPending(false);// 消息发送完成，设置 sendPending 为 false
         }
     }
@@ -108,7 +142,7 @@ export const Form = ({ chatId }: FormProps) => {
                 attachments={attachments}
                 onRemove={handleRemoveAttachment}
             />
-            <div className="px-2 sm:px-12 md:px-36 2xl:px-72 w-full items-center justify-center">
+            <div className="sm:px-12 md:px-64 2xl:px-96 w-full items-center justify-center">
                 <div className="border-[2px] border-neutral-500 rounded-xl flex items-center justify-center hover:border-white/80">
                     <Input
                         placeholder="Message TalkGPT..."
@@ -118,14 +152,14 @@ export const Form = ({ chatId }: FormProps) => {
                         onKeyDown={handleKeyDown}
                     /> 
                     <div className="flex items-center gap-x-2 pr-2">
-                        <FileUpload onFileSelect={handleFileSelect} onFileUploading={handleFileUploading} model={user?user.model: 'kimi'}/>
+                        <FileUpload onFileSelect={handleFileSelect} onFileUploading={handleFileUploading} model={user?user.model: 'kimi'} sendPending={sendPending}/>
                         {sendPending? (
                             <CircleStop className="w-5 h-5 cursor-pointer" onClick={stopStream}/>
 
                         ): (
                             <Send  
-                            className={`w-5 h-5 cursor-pointer ${uploadPending? 'opacity-50 cursor-not-allowed' : 'hover:text-neutral-300'}`}
-                            onClick={handleSendMessage}
+                            className={`w-5 h-5 cursor-pointer ${uploadPending? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:text-neutral-300'}`}
+                            onClick={uploadPending? undefined : handleSendMessage}
                         />
                         )} 
                     </div>

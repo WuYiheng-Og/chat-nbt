@@ -1,67 +1,68 @@
 import { Paperclip } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { GPTModel } from "@/lib/types";
 
 interface FileUploadProps {
     onFileSelect: (files: File[]) => void;
-    onFileUploading: (uploadPending: boolean, attachmentMetaInfo: FormattedFile[])=> void;
+    onFileUploading: (uploadPending: boolean, attachmentMetaInfo: FormattedFile[]) => void;
     model: string;
-} 
+    sendPending: boolean; // 外部传入状态
+}
 // 文件元数据
 type FormattedFile = {
-    key: string,// 通过key可以索引url
+    key: string, // 通过key可以索引url
     name: string,
     type: string,
-    size:number,
-}
-export const FileUpload = ({ onFileSelect, onFileUploading, model }: FileUploadProps) => {
+    size: number,
+};
+
+export const FileUpload = ({ onFileSelect, onFileUploading, model, sendPending }: FileUploadProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     const handleUpload = () => {
-        fileInputRef.current?.click();
+        if (!isUploading &&!sendPending) {
+            fileInputRef.current?.click();
+        }
     };
 
     // 选择文件，将文件传递给父组件
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
-        console.log('接收文件：',files);
-        // TODO 上传文件到Moonshot，让其解析（此处获取文件的id，后面通过id索引文件内容）
-        onFileUploading(true, []);// 开始加载
+        setIsUploading(true);
+        onFileUploading(true, []); // 开始加载
         onFileSelect(files); // 把文件传给父组件
 
-        console.log('开始上传文件到Moonshot:'); 
-        // 正式上传 
-        console.log('上传文件给api', files);
-        // 将file存入formData，以便序列化传入。因为File类型是二进制文件，无法直接序列化
+        // 正式上传
         const formData = new FormData();
         files.forEach((file) => {
             formData.append(`file`, file);
-        } );
-        const GPTVersion = model === GPTModel.KIMI ? "moonshot" : "coze";
+        });
+        const GPTVersion = model === GPTModel.KIMI? "moonshot" : "coze";
         const response = await fetch(`/api/${GPTVersion}/files`, {
-            method: "POST", 
+            method: "POST",
             body: formData
-          })
-    
-          const res = await response.json()
-          console.log('上传完成，结束加载，formatFiles',res.formatFiles); 
-          // 将文件传递给父组件
-          
-        onFileUploading(false, res.formatFiles);// 结束加载
+        });
+
+        const res = await response.json();
+        setIsUploading(false);
+        onFileUploading(false, res.formatFiles); // 结束加载
+
     };
+    const isDisabled = isUploading || sendPending;
 
     return (
         <>
-            <input 
+            <input
                 type="file"
                 ref={fileInputRef}
                 className="hidden"
                 onChange={handleFileChange}
                 multiple
             />
-            <Paperclip 
-                className="w-5 h-5 cursor-pointer hover:text-neutral-300" 
-                onClick={handleUpload}
+            <Paperclip
+                className={`w-5 h-5 ${isDisabled? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:text-neutral-300'}`}
+                onClick={isDisabled? undefined : handleUpload}
             />
         </>
     );

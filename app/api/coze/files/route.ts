@@ -71,7 +71,7 @@ export async function POST(
                 const aiFile = await cozeClient.files.upload({
                     file: fileStream
                 });  
-                console.log('接收coze上传文件的信息：', aiFile.id);
+                // console.log('接收coze上传文件的信息：', aiFile.id);
                 
                 // 文件备份到阿里云，便于网络访问 
                 await aliClient.put(`attachments/${aiFile.id}`, buffer); 

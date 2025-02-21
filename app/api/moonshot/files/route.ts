@@ -37,7 +37,7 @@ export async function POST(
     req: NextRequest, 
 )  { 
         const formData = await req.formData();
-        console.log('kimi获取发送的消息：',formData);
+        // console.log('kimi获取发送的消息：',formData);
         // 声明数组并指定元素类型
         const formatFiles: FormattedFile[] = [];  
         try {
@@ -64,6 +64,7 @@ export async function POST(
                     }
 
                 }
+                // console.log('kimi成功解析，并上传文件',formatFiles);
                 
             return NextResponse.json({ formatFiles: formatFiles }, { status: 200 });
         } catch (error) {
@@ -72,21 +73,3 @@ export async function POST(
         }
 }
 
-// 查看上传文件解析的内容
-export async function GET(req: NextRequest) {
-        // 获取路径携带参数
-        const { searchParams } = new URL(req.url);
-        const fileKey = searchParams.get('key');
-    try {
-        if (!fileKey) {
-            return NextResponse.json({ error: '文件传入Key出错' }, { status: 400 });
-        }
-        const fileResponse = await kimiClient.files.content(fileKey);
-        
-        const fileContent = await fileResponse.text();
-        return NextResponse.json({ fileContent }, { status: 200 });
-    } catch (error) {
-        console.error('Error getting file content:', error);
-        return NextResponse.json({ error: '无法获取文件内容' }, { status: 500 });
-    }
-}

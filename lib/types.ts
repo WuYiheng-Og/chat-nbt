@@ -4,4 +4,4 @@ export const GPTModel = {
     COZE: "coze"
 } as const;
 
-export const COZE_BOT_ID = '7471183323570847779'
+export const COZE_BOT_ID = '7473893326245576715'
