@@ -49,7 +49,7 @@ const Chat = ({ params }: ChatPageProps) => {
                     {messages?.length === 0 ? (
                         <div className="mx-auto flex flex-col items-center w-full pt-52">
                             <h2 className="text-xl md:text-3xl font-semibold text-white px-2">
-                                我 可 以 为 你  做 什 么 呢 ？
+                            准备好提问了吗？我随时可以开始哦！
                             </h2>
                         </div>
                     ):(
