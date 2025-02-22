@@ -39,7 +39,7 @@ function MessageBox ({
                 {message.role!=="user"&&message.content==="" && (<div>
                     <LoaderCircle className="w-4 h-4 animate-spin" />
                 </div>)}
-                <div className="flex flex-grow flex-col gap-3 gap-y-5">
+                <div className={`flex flex-grow flex-col gap-3 ${message.role === "user" ? "items-end" : "items-start"}`}>
                     <Markdown content={message.content} /> 
                     {hasAttachments && (
                         <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList}/>

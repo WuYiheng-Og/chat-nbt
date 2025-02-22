@@ -47,29 +47,29 @@ const AttachmentDisplay: React.FC<AttachmentDisplayProps> = ({ attachmentMetaInf
     }
 
     return (
-        <div className="mt-4"> 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {attachmentMetaInfoList?.map((attachment, index) => (
-                    <div
-                        key={index}
-                        className="bg-white p-2 rounded-md shadow-md flex flex-col items-center"
-                    >
-                        {attachment.type.startsWith('image/')? ( 
-                                <img
-                                    src={presignedUrls[attachment.key]}
-                                    alt={attachment.name}
-                                    className="max-w-full max-h-48 object-contain rounded-lg mb-2"
-                                />
-                            
-                        ) : (
-                            <img src='/file.svg' className="w-8 h-8 text-neutral-200" />
-                        )}
-                        <p className="text-sm text-gray-700 text-center">
-                            {attachment.name} ({formatFileSize(attachment.size)})
-                        </p>
-                    </div>
-                ))}
-            </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {attachmentMetaInfoList?.map((attachment, index) => (
+                <div
+                    key={index}
+                    className={`bg-white p-2 rounded-md shadow-md 
+                        ${attachmentMetaInfoList.length === 1 && 'col-start-3'}
+                        ${attachmentMetaInfoList.length === 2 && (index === 0 ? 'col-start-2' : 'col-start-3')}`}
+                >
+                    {attachment.type.startsWith('image/')? ( 
+                            <img
+                                src={presignedUrls[attachment.key]}
+                                alt={attachment.name}
+                                className="max-w-full max-h-48 object-contain rounded-lg mb-2"
+                            />
+                        
+                    ) : (
+                        <img src='/file.svg' className="w-8 h-8 text-neutral-200" />
+                    )}
+                    <p className="text-sm text-gray-700 text-center">
+                        {attachment.name} ({formatFileSize(attachment.size)})
+                    </p>
+                </div>
+            ))}
         </div>
     );
 };
