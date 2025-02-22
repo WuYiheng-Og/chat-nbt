@@ -2,7 +2,7 @@
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/chatpage/header";
 import { Body } from "@/components/chatpage/body";
@@ -23,6 +23,7 @@ const Chat = ({ params }: ChatPageProps) => {
     const chat = useQuery(api.chats.get, { id: chatId });
     const messages = useQuery(api.messages.list, { chatId });
     const router = useRouter();
+    const updateTitile = useMutation(api.chats.rename);
 
     useEffect(() => {
         if (chat === null) {
@@ -33,7 +34,27 @@ const Chat = ({ params }: ChatPageProps) => {
     if (chat === null) {
         return null;
     }
-
+    useEffect(() => {
+        // 定义并立即执行一个异步函数
+        (async () => {
+            if (messages && messages.length === 1) {
+                const firstMessage = messages[0];
+                const question = firstMessage.content; // 假设消息内容就是问题
+                console.log('获取到第一条信息，修改会话标题----------',question);
+                
+                try {
+                    // 调用 API 更新聊天标题
+                    await updateTitile({
+                        id: chatId,
+                        title: question
+                    });
+                    
+                } catch (error) {
+                    console.error('Failed to update title:', error);
+                }
+            }
+        })();
+    }, [messages, chatId]);
 
     return (
         <div className="bg-neutral-800 w-full h-full flex flex-col">
