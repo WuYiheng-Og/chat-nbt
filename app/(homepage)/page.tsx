@@ -16,7 +16,7 @@ const Homepage = () => {
         fetch();
     }, [storeUser, router])
     return (
-        <div className="bg-neutral-800 h-full">Creating a new chat</div>
+        <div className="bg-neutral-800 h-full">创建新的对话中</div>
     )
 }
 

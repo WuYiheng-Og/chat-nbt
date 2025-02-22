@@ -34,6 +34,7 @@ const Chat = ({ params }: ChatPageProps) => {
         return null;
     }
 
+
     return (
         <div className="bg-neutral-800 w-full h-full flex flex-col">
             <Header />
@@ -44,7 +45,7 @@ const Chat = ({ params }: ChatPageProps) => {
                     </div>
                 </div>
             ):(
-                <div className="flex flex-col h-[calc(100vh-60px)]">
+                <div className="flex flex-col h-[calc(100vh-60px)] mt-24"> {/* 添加 mt-24 增加顶部间距 */}
                     {messages?.length === 0 ? (
                         <div className="mx-auto flex flex-col items-center w-full pt-52">
                             <h2 className="text-xl md:text-3xl font-semibold text-white px-2">
@@ -68,6 +69,8 @@ const Chat = ({ params }: ChatPageProps) => {
             )}
         </div>
     )
+
+
 }
 
 export default Chat;
