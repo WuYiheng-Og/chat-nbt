@@ -1,10 +1,10 @@
-import { sendMsgByCoze } from "@/app/api/coze/chat/func";
 import { api } from "@/convex/_generated/api";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { GPTModel } from "@/lib/types";
 import { ChatEventType } from "@coze/api";
 import {fetchMutation, fetchQuery} from 'convex/nextjs';
 import {NextRequest, NextResponse } from "next/server";
+import { sendMsgByCoze } from "@/app/api/coze/chat/func";
 import { sendMsgByMoonshot,parse_files_content } from "../moonshot/chat/func";
 
 // 文件元数据

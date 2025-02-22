@@ -9,7 +9,7 @@ const cozeClient = new CozeAPI({
 // 接收信息，请求coze api，返回stream流
 export async function sendMsgByCoze(formattedMessages: object) { 
     
-    console.log('调用coze api');
+    console.log('调用coze api', process.env.COZE_API_KEY!);
     try { 
         // const parsedData = JSON.parse(formattedMessagesString);
         // const formattedMessages = parsedData.formattedMessages;
