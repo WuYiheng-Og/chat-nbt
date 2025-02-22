@@ -4,18 +4,18 @@ import { toast } from 'sonner';
 import copy from 'copy-to-clipboard'
 import { Clipboard } from 'lucide-react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import { gruvboxDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
-// import remarkGfm from 'remark-gfm';
-// import remarkAddClassNameToLastNode from '@/lib/markdown_plugins';
+import { gruvboxDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs'; 
+import { useSendPending } from '@/app/context/ChatContext';
 
 interface MarkdownProps {
     content: string;
     role: "user" | "assistant";
+    ableToShowLoading: boolean;// 是否能够加载showLoading，即能否具备加载卡基米的能力。
 }
 
-export default function Markdown({ content, role }: MarkdownProps) { 
-    // 合并 content 和图片的 Markdown 语法
-    // const combinedContent = `${content}![Big Cat Run](/biga_cat_run.gif)`;
+export default function Markdown({ content, role, ableToShowLoading }: MarkdownProps) {  
+    const {sendPending} = useSendPending();
+    
     const handleCopy = (text: string) => {
         copy(text);
         toast.success("Copied to clipboard."); 
@@ -30,8 +30,8 @@ export default function Markdown({ content, role }: MarkdownProps) {
     }, [content]);
 
     const isLastNode = (node: any) => {
-        console.log(node.children.length)
-        return node.position?.end.offset === content.length && node.children.length <= 2 && role === "assistant";
+        if(!ableToShowLoading) return false;// 如果不是最后一个节点，直接不渲染卡基米跑步。
+        return role === "assistant" && node.position?.end.offset === content.length && node.children.length <=2;
       };
 
     return ( 
@@ -42,7 +42,7 @@ export default function Markdown({ content, role }: MarkdownProps) {
                 p: ({ node, children, ...props }) => (
                     <p
                       ref={isLastNode(node) ? lastNodeRef : null}
-                      className={isLastNode(node) ? 'last-node' : ''}
+                      className={sendPending && isLastNode(node) ? 'last-node' : ''}
                       {...props}
                     >
                       {children}
@@ -51,7 +51,7 @@ export default function Markdown({ content, role }: MarkdownProps) {
                 li: ({ node, children, ...props }) => (
                 <div ref={isLastNode(node) ? lastNodeRef : null}>
                     <li
-                    className={isLastNode(node) ? 'last-node' : ''}
+                    className={sendPending && isLastNode(node) ? 'last-node' : ''}
                     {...props}
                     >
                     {children}
@@ -61,12 +61,12 @@ export default function Markdown({ content, role }: MarkdownProps) {
                 h1: ({ node, children, ...props }) => (
                 <h1
                     ref={isLastNode(node) ? lastNodeRef : null}
-                    className={isLastNode(node) ? 'last-node' : ''}
+                    className={sendPending && isLastNode(node) ? 'last-node' : ''}
                     {...props}
                 >
                     {children}
                 </h1>
-                ),
+                ), 
                 code({className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || '')
                     return match ? (
