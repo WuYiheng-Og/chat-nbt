@@ -1,7 +1,6 @@
 import { CozeAPI, COZE_CN_BASE_URL, EnterMessage} from '@coze/api';
 import { COZE_BOT_ID } from '@/lib/types';
-import * as dotenv from 'dotenv';
-dotenv.config();
+
 const cozeClient = new CozeAPI({
     token: process.env.COZE_API_KEY!,
     baseURL: COZE_CN_BASE_URL
@@ -11,18 +10,15 @@ const cozeClient = new CozeAPI({
 export async function sendMsgByCoze(formattedMessages: object) { 
     
     console.log('调用coze api');
-
     try { 
         // const parsedData = JSON.parse(formattedMessagesString);
         // const formattedMessages = parsedData.formattedMessages;
-
-        
         // 创建流式聊天完成请求
         const stream = cozeClient.chat.stream({
             bot_id: COZE_BOT_ID!,
             additional_messages: formattedMessages as unknown as EnterMessage[],
         })
- 
+        
         return stream;
 
     }

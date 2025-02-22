@@ -140,7 +140,6 @@ export async function POST(req: NextRequest) {
                         break;
                     }
                     if (chatData.event === ChatEventType.CONVERSATION_MESSAGE_DELTA) {
-                        // console.log('Received message delta:', chatData.data.content);
                         const line = chatData.data.content;
                         fullResponse+=line;
                         await fetchMutation(api.messages.update,{

@@ -4,19 +4,26 @@ import copy from 'copy-to-clipboard'
 import { Clipboard } from 'lucide-react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { gruvboxDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
+import remarkGfm from 'remark-gfm';
+import remarkAddClassNameToLastNode from '@/lib/markdown_plugins';
+
 interface MarkdownProps {
     content: string;
 }
 
 export default function Markdown({ content }: MarkdownProps) { 
-    
+    // 合并 content 和图片的 Markdown 语法
+    const combinedContent = `${content}![Big Cat Run](/biga_cat_run.gif)`;
     const handleCopy = (text: string) => {
         copy(text);
         toast.success("Copied to clipboard."); 
     }
 
+
     return ( 
         <ReactMarkdown
+            className='custom-markdown'
+            // remarkPlugins={[remarkGfm, remarkAddClassNameToLastNode('last-node')]}
             components={{
                 code({className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || '')
