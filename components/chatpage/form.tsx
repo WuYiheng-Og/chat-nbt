@@ -6,7 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { CircleStop, Send } from "lucide-react";
-import {  useRef, useState } from "react"; 
+import {  useRef, useState } from "react";
 // 文件元数据
 type FormattedFile = {
     key: string,// 通过key可以索引url
@@ -25,9 +25,9 @@ export const Form = ({ chatId }: FormProps) => {
     const [message, setMessage] = useState<string>("");
     const [attachments, setAttachments] = useState<File[]>([]);
     const [attachmentMetaInfoList, setAttachmentMetaInfoList] = useState<FormattedFile[]>([]);// 文件元数据
-    const [uploadPending, setUploadPending] = useState(false);// true表示正在上传，否则不在上传 
+    const [uploadPending, setUploadPending] = useState(false);// true表示正在上传，否则不在上传
     const [sendPending, setSendPending] = useState(false);// true表示正在生成回答
-    
+
     // 用于终止聊天
     const abortControllerRef = useRef<AbortController | null>(null);
     if (chat === undefined) {
@@ -49,8 +49,8 @@ export const Form = ({ chatId }: FormProps) => {
     }
 
     // 选择文件后，将文件传递给父组件
-    const handleFileSelect = (files: File[]) => { 
-        setAttachments(prev => [...prev, ...files]); 
+    const handleFileSelect = (files: File[]) => {
+        setAttachments(prev => [...prev, ...files]);
     };
 
     // 删除上传的文件
@@ -60,19 +60,19 @@ export const Form = ({ chatId }: FormProps) => {
 
     // 发送消息给大语言模型
     const handleSendMessage = async () => {
-        
+
         if (message === "") return;
         const temp = message;
         setMessage("");
         setSendPending(true); // 开始发送消息，设置 sendPending 为 true
         console.log('开始发送',sendPending);
-        
+
 
         // 创建 AbortController 实例
         const abortController = new AbortController();
         abortControllerRef.current = abortController;
         console.log('发送消息！');
-        
+
         // await sendMessage({
         //     role: "user",
         //     content: temp,
@@ -116,7 +116,7 @@ export const Form = ({ chatId }: FormProps) => {
 
     // 中断流式传输
     const stopStream = () => {
-        
+
         if (abortControllerRef.current) {
             // 调用 abort 方法中断请求
             abortControllerRef.current.abort();
@@ -134,10 +134,10 @@ export const Form = ({ chatId }: FormProps) => {
             handleSendMessage();
         }
     }
- 
+
     return (
         <div className="flex flex-col w-full">
-            <AttachmentPreview 
+            <AttachmentPreview
                 isUploading={uploadPending}
                 attachments={attachments}
                 onRemove={handleRemoveAttachment}
@@ -145,23 +145,23 @@ export const Form = ({ chatId }: FormProps) => {
             <div className="px-2 sm:px-12 md:px-36 2xl:px-72 w-full items-center justify-center">
                 <div className="border-[2px] border-neutral-500 rounded-xl flex items-center justify-center hover:border-white/80">
                     <Input
-                        placeholder="Message TalkGPT..."
+                        placeholder="发送消息或者上传附件..."
                         className="bg-inherit text-neutral-200 placeholder:text-neutral-400 h-12 focus:outline-none"
                         value={message}
                         onChange={e => setMessage(e.target.value)}
                         onKeyDown={handleKeyDown}
-                    /> 
+                    />
                     <div className="flex items-center gap-x-2 pr-2">
                         <FileUpload onFileSelect={handleFileSelect} onFileUploading={handleFileUploading} model={user?user.model: 'kimi'} sendPending={sendPending}/>
                         {sendPending? (
                             <CircleStop className="w-5 h-5 cursor-pointer" onClick={stopStream}/>
 
                         ): (
-                            <Send  
+                            <Send
                             className={`w-5 h-5 cursor-pointer ${uploadPending? 'opacity-50 cursor-not-allowed' : 'hover:text-neutral-300'}`}
                             onClick={uploadPending? undefined : handleSendMessage}
                         />
-                        )} 
+                        )}
                     </div>
                 </div>
             </div>
