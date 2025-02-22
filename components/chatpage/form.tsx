@@ -142,7 +142,7 @@ export const Form = ({ chatId }: FormProps) => {
                 attachments={attachments}
                 onRemove={handleRemoveAttachment}
             />
-            <div className="sm:px-12 md:px-64 2xl:px-96 w-full items-center justify-center">
+            <div className="px-2 sm:px-12 md:px-36 2xl:px-72 w-full items-center justify-center">
                 <div className="border-[2px] border-neutral-500 rounded-xl flex items-center justify-center hover:border-white/80">
                     <Input
                         placeholder="Message TalkGPT..."
@@ -158,7 +158,7 @@ export const Form = ({ chatId }: FormProps) => {
 
                         ): (
                             <Send  
-                            className={`w-5 h-5 cursor-pointer ${uploadPending? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:text-neutral-300'}`}
+                            className={`w-5 h-5 cursor-pointer ${uploadPending? 'opacity-50 cursor-not-allowed' : 'hover:text-neutral-300'}`}
                             onClick={uploadPending? undefined : handleSendMessage}
                         />
                         )} 
