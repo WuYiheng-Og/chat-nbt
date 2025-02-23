@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { toast } from 'sonner';
 import copy from 'copy-to-clipboard'
@@ -21,13 +21,6 @@ export default function Markdown({ content, role, ableToShowLoading }: MarkdownP
         toast.success("Copied to clipboard."); 
     }
     const lastNodeRef = useRef<HTMLDivElement>(null);
-
-    // 当内容更新时，滚动到最后一个节点
-    useEffect(() => {
-        if (lastNodeRef.current) {
-        lastNodeRef.current.scrollIntoView({ behavior: 'smooth' });
-        }
-    }, [content]);
 
     const isLastNode = (node: any) => {
         if(!ableToShowLoading) return false;// 如果不是最后一个节点，直接不渲染卡基米跑步。
