@@ -5,6 +5,7 @@ import { Id } from '@/convex/_generated/dataModel';
 import { useQuery } from 'convex/react'
 import { useParams } from 'next/navigation';
 import { ChatBox } from './chat-box';
+import { LoaderCircle } from 'lucide-react';
 
 export const ChatList = () => {
     // 获取聊天列表数据
@@ -17,7 +18,13 @@ export const ChatList = () => {
     const chatId = params?.chatId;
 
     if (chats === undefined) {
-        return <div>Loading...</div>
+        return (
+        <div className="flex flex-col h-[calc(100vh-60px)] items-center">
+            <div className="pt-52">
+                <LoaderCircle className="w-16 h-16 animate-spin" />
+            </div>
+        </div>
+        )
     }
 
     return (

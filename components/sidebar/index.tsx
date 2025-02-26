@@ -6,7 +6,6 @@ export const Sidebar = () => {
         <div className="h-full hidden lg:flex lg:flex-col lg:w-[300px] bg-neutral-950 p-4">
             <NewChatButton />
             <ChatList />
-            <p>UpgradePlanButton</p>
         </div>
     )
 }

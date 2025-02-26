@@ -19,6 +19,7 @@ interface ChatPageProps {
 }
 
 const Chat = ({ params }: ChatPageProps) => {
+    
     const resolvedParams = React.use(params);
     const chatId = resolvedParams?.chatId;
     const chat = useQuery(api.chats.get, { id: chatId });
@@ -26,6 +27,8 @@ const Chat = ({ params }: ChatPageProps) => {
     const router = useRouter();
     const updateTitile = useMutation(api.chats.rename);
 
+
+    
     useEffect(() => {
         if (chat === null) {
             router.push("/");

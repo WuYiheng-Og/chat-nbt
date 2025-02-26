@@ -36,10 +36,11 @@ export const ChatBox = ({
         setIsEditing(false);
     }
     // 删除某个chat，并跳转首页。
-    const handleDelete = () => {
+    const handleDelete = async() => {
+        router.push('/'); 
         // TODO，此处删除仅仅删除了chat表，没有删除关联的messages
-        remove({ id: chat._id });
-        router.push('/');
+        await remove({ id: chat._id });
+        
     }
     // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     //     if (e.key === "Enter") {

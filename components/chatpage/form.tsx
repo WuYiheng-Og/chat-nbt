@@ -17,6 +17,7 @@ type FormattedFile = {
 interface FormProps {
     chatId: Id<"chats">;
 }
+
 // 输入框，与大模型对话请求对接。
 export const Form = ({ chatId }: FormProps) => {
     const chat = useQuery(api.chats.get, { id: chatId });

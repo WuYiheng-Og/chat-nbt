@@ -6,7 +6,7 @@ import { ConvexClientProvider } from "@/providers/convex-client-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ChatGPT Clone",
+  title: "ChatNBT",
   description: "Chat with AI"
 }
 
@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="ch">
       <body className={inter.className}>
         <ConvexClientProvider>
           {children}

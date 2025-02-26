@@ -2,6 +2,7 @@
 
 import { api } from "@/convex/_generated/api";
 import { useMutation } from "convex/react";
+import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -16,7 +17,13 @@ const Homepage = () => {
         fetch();
     }, [storeUser, router])
     return (
-        <div className="bg-neutral-800 h-full">创建新的对话中</div>
+        <div className="bg-neutral-800 h-full">
+            <div className="flex flex-col h-[calc(100vh-60px)] items-center">
+                <div className="pt-52">
+                    <LoaderCircle className="w-16 h-16 animate-spin" />
+                </div>
+            </div>
+        </div>
     )
 }
 
