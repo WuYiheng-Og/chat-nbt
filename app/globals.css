@@ -84,7 +84,8 @@ body {
     width: 23px;
     height: 17px;
     background-image: url('/biga_cat_run.gif');
+    background-size: 50% 50%;
     background-size: cover;
-    transform: translate(2px, 2px);
+    margin-left: 8px; /* ml-2 对应 8px */
   }
 }

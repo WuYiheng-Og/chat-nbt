@@ -32,22 +32,12 @@ export const Body = ({ chatId }: BodyProps) => {
                 className="h-full w-full flex-1"
             >
                 <div className="px-2 sm:px-12 md:px-36 2xl:px-72 w-screen lg:w-full">
-                    {messages.slice(0, -1).map((message) => (
+                    {messages.map((message) => (
                         <MessageBox
                             key={message._id}
                             message={message}
                             userImageUrl={user?.imageUrl}
                             model={curUser?.model}
-                        />
-                    ))}
-                    {/* 最后一个元素特殊处理，为了流式渲染 */}
-                    {messages.slice(-1).map((message) => (
-                        <MessageBox
-                            key={message._id}
-                            message={message}
-                            userImageUrl={user?.imageUrl}
-                            model={curUser?.model}
-                            isLastMsg={true}
                         />
                     ))}
                 </div>

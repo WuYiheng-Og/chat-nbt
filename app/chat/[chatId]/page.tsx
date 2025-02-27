@@ -9,7 +9,6 @@ import { Body } from "@/components/chatpage/body";
 import { Form } from "@/components/chatpage/form";
 import React, { useEffect } from "react";
 import { LoaderCircle } from 'lucide-react';
-import { SendPendingProvider } from "@/app/context/ChatContext";
 
 interface ChatPageProps {
     // 新版的nextjs传入动态路由的参数是一个promise类型
@@ -58,7 +57,6 @@ const Chat = ({ params }: ChatPageProps) => {
     }, [messages, chatId]);
 
     return (
-        <SendPendingProvider>
         <div className="bg-neutral-800 w-full h-full flex flex-col">
             <Header />
             {messages===undefined ? (
@@ -91,7 +89,6 @@ const Chat = ({ params }: ChatPageProps) => {
                 </div>
             )}
         </div>
-      </SendPendingProvider>
     )
 
 

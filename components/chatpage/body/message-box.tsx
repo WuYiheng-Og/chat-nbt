@@ -10,14 +10,12 @@ interface MessageBoxProps {
     message: Doc<"messages">;
     userImageUrl?: string; 
     model?: string;
-    isLastMsg?: boolean // 看是否为最后一个消息
 }
 
 function MessageBox ({
     message,
     userImageUrl,
-    model,
-    isLastMsg
+    model
 }: MessageBoxProps) {
     
     // 如果 role 是 system，直接返回 null，不渲染
@@ -42,7 +40,7 @@ function MessageBox ({
                     <LoaderCircle className="w-4 h-4 animate-spin" />
                 </div>)}
                 <div className={`flex flex-grow flex-col gap-3 ${message.role === "user" ? "items-end" : "items-start"}`}>
-                    <Markdown content={message.content} role={message.role} ableToShowLoading={isLastMsg??false}/> 
+                    <Markdown content={message.content} role={message.role}/> 
                     {hasAttachments && (
                         <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList}/>
                     )}
