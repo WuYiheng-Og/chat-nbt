@@ -1,12 +1,12 @@
 import { AttachmentPreview } from "@/components/files/AttachmentPreview";
 import { FileUpload } from "@/components/files/FileUpload";
 import { Input } from "@/components/ui/input";
-// import sendMessage from "@/controller/chat";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { CircleStop, Send } from "lucide-react";
 import {  useRef, useState } from "react";
+import { useSendPending } from "@/app/context/ChatContext";
 // 文件元数据
 type FormattedFile = {
     key: string,// 通过key可以索引url
@@ -26,7 +26,9 @@ export const Form = ({ chatId }: FormProps) => {
     const [attachments, setAttachments] = useState<File[]>([]);
     const [attachmentMetaInfoList, setAttachmentMetaInfoList] = useState<FormattedFile[]>([]);// 文件元数据
     const [uploadPending, setUploadPending] = useState(false);// true表示正在上传，否则不在上传
-    const [sendPending, setSendPending] = useState(false);// true表示正在生成回答
+    //const [sendPending, setSendPending] = useState(false);// true表示正在生成回答
+    // 全局共享 true表示正在生成回答
+    const {sendPending, setSendPending} = useSendPending();
 
     // 用于终止聊天
     const abortControllerRef = useRef<AbortController | null>(null);

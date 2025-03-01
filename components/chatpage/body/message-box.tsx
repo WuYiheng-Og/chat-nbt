@@ -7,11 +7,13 @@ import { GPTModel } from "@/lib/types";
 import { LoaderCircle, CopyIcon, RefreshCwIcon } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify'; // 导入 toast 和 ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // 导入样式
+import Image from 'next/image';
 
 interface MessageBoxProps {
     message: Doc<"messages">;
     userImageUrl?: string;
     model?: string;
+    isLastMsg?: boolean; // 看是否为最后一个消息
     onRegenerate?: (messageId: string) => void; // 新增属性，用于触发重新生成
 }
 
@@ -19,6 +21,7 @@ function MessageBox ({
                          message,
                          userImageUrl,
                          model,
+                         isLastMsg,
                          onRegenerate
                      }: MessageBoxProps) {
 
@@ -68,7 +71,8 @@ function MessageBox ({
         <>
             <div className={`flex pb-8 ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
                 <Avatar className="w-7 h-7 text-white fill-white">
-                    <AvatarImage src={imageUrl} className="text-white fill-white" />
+                    {/*<AvatarImage src={imageUrl} className="text-white fill-white" /> 这个地方用AvatarImage时，AI新消息到来时用户上一条消息的头像每次都重新渲染，会闪一下*/}
+                    <Image src={imageUrl as string} className="text-white fill-white" alt="avatar" width={200} height={200}/>
                     <AvatarFallback className="text-neutral-900 font-semibold">
                         {nameString[0]}
                     </AvatarFallback>
@@ -91,7 +95,7 @@ function MessageBox ({
                             </div>
                         )}
                         <div className={`flex flex-grow flex-col gap-3 ${message.role === "user" ? "items-end" : "items-start"}`}>
-                            <Markdown content={message.content} role={message.role}/>
+                            <Markdown content={message.content} role={message.role} ableToShowLoading={isLastMsg??false}/>
                             {hasAttachments && (
                                 <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList}/>
                             )}
