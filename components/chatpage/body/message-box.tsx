@@ -26,6 +26,7 @@ function MessageBox ({
     const nameString = message.role === "user" ? "You" : (model === GPTModel.KIMI ? "TalkKimi" : "TalkCoze");
     const imageUrl = message.role === "user" ? userImageUrl : (model === GPTModel.KIMI ? '/kimi_log.svg' : '/coze_log.svg');
     const hasAttachments = message.attachmentMetaInfoList && message.attachmentMetaInfoList.length > 0;
+
     return (
         <div className={`flex pb-8 ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
             <Avatar className="w-7 h-7 text-white fill-white">
@@ -35,17 +36,19 @@ function MessageBox ({
                 </AvatarFallback>
             </Avatar>
             <div className="max-w-[calc(80%)] px-2">
-                <h3 className={`font-bold ${message.role === "user" ? "text-end" : "text-start"}`}>{nameString}</h3>
-                {message.role !== "user" && message.content === "" && (
-                    <div>
-                        <LoaderCircle className="w-4 h-4 animate-spin" />
-                    </div>
-                )}
-                <div className={`flex flex-grow flex-col gap-3 ${message.role === "user" ? "items-end" : "items-start"}`}>
-                    <Markdown content={message.content} role={message.role}/>
-                    {hasAttachments && (
-                        <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList}/>
+                <h3 className={`font-bold text-white ${message.role === "user" ? "text-end" : "text-start"}`}>{nameString}</h3>
+                <div className={`border border-gray-500 rounded-lg p-4 bg-gray-800 shadow-md text-white ${message.role === "user" ? "ml-10" : "mr-10"}`}>
+                    {message.role !== "user" && message.content === "" && (
+                        <div className="flex justify-center items-center">
+                            <LoaderCircle className="w-4 h-4 animate-spin" />
+                        </div>
                     )}
+                    <div className={`flex flex-grow flex-col gap-3 ${message.role === "user" ? "items-end" : "items-start"}`}>
+                        <Markdown content={message.content} role={message.role}/>
+                        {hasAttachments && (
+                            <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList}/>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
