@@ -4,7 +4,7 @@ import { Doc } from "@/convex/_generated/dataModel";
 import AttachmentDisplay from "@/components/files/AttachmentDisplay";
 import React from "react";
 import { GPTModel } from "@/lib/types";
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle, CopyIcon } from 'lucide-react';
 
 interface MessageBoxProps {
     message: Doc<"messages">;
@@ -39,6 +39,14 @@ function MessageBox ({
         }
     };
 
+    const handleCopyClick = (content: string) => {
+        navigator.clipboard.writeText(content).then(() => {
+            alert('内容已复制到剪贴板');
+        }).catch(err => {
+            console.error('复制失败:', err);
+        });
+    };
+
     return (
         <div className={`flex pb-8 ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
             <Avatar className="w-7 h-7 text-white fill-white">
@@ -47,7 +55,7 @@ function MessageBox ({
                     {nameString[0]}
                 </AvatarFallback>
             </Avatar>
-            <div className="max-w-[calc(80%)] px-2">
+            <div className="max-w-[calc(80%)] px-2 relative">
                 <h3 className={`font-bold text-white ${message.role === "user" ? "text-end" : "text-start"}`}>{nameString}</h3>
                 {/* 应用不同的样式 */}
                 <div style={{
@@ -56,7 +64,8 @@ function MessageBox ({
                     borderRadius: '8px',
                     padding: '16px',
                     boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-                    color: 'white'
+                    color: 'white',
+                    position: 'relative'
                 }}>
                     {message.role !== "user" && message.content === "" && (
                         <div className="flex justify-center items-center">
@@ -69,6 +78,13 @@ function MessageBox ({
                             <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList}/>
                         )}
                     </div>
+                    {/* 复制按钮 */}
+                    <button
+                        onClick={() => handleCopyClick(message.content)}
+                        className="mt-2"
+                    >
+                        <CopyIcon size={20} />
+                    </button>
                 </div>
             </div>
         </div>
