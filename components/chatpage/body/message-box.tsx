@@ -27,6 +27,18 @@ function MessageBox ({
     const imageUrl = message.role === "user" ? userImageUrl : (model === GPTModel.KIMI ? '/kimi_log.svg' : '/coze_log.svg');
     const hasAttachments = message.attachmentMetaInfoList && message.attachmentMetaInfoList.length > 0;
 
+    // 定义不同的消息框样式
+    const messageStyle = {
+        userMessage: {
+            backgroundColor: '#3a404d', // 用户消息背景颜色
+            marginLeft: '10px'
+        },
+        aiMessage: {
+            backgroundColor: '#282c34', // AI消息背景颜色
+            marginRight: '10px'
+        }
+    };
+
     return (
         <div className={`flex pb-8 ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
             <Avatar className="w-7 h-7 text-white fill-white">
@@ -37,7 +49,15 @@ function MessageBox ({
             </Avatar>
             <div className="max-w-[calc(80%)] px-2">
                 <h3 className={`font-bold text-white ${message.role === "user" ? "text-end" : "text-start"}`}>{nameString}</h3>
-                <div className={`border border-gray-500 rounded-lg p-4 bg-gray-800 shadow-md text-white ${message.role === "user" ? "ml-10" : "mr-10"}`}>
+                {/* 应用不同的样式 */}
+                <div style={{
+                    ...message.role === "user" ? messageStyle.userMessage : messageStyle.aiMessage,
+                    border: '1px solid gray',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+                    color: 'white'
+                }}>
                     {message.role !== "user" && message.content === "" && (
                         <div className="flex justify-center items-center">
                             <LoaderCircle className="w-4 h-4 animate-spin" />
@@ -57,7 +77,7 @@ function MessageBox ({
 
 // 自定义比较函数
 const arePropsEqual = (prevProps: MessageBoxProps, nextProps: MessageBoxProps ) => {
-    // 用户的肯定不再次渲染了
+    // 用户的消息不再次渲染了
     if(nextProps.message.role === 'user') return true;
     return (
         prevProps.message._id === nextProps.message._id &&
@@ -65,10 +85,8 @@ const arePropsEqual = (prevProps: MessageBoxProps, nextProps: MessageBoxProps ) 
         prevProps.model === nextProps.model
     )
 };
+
 // 使用 React.memo 包裹 MessageBox 组件【减少不必要的渲染】
 const MemoizedMessageBox = React.memo(MessageBox, arePropsEqual );
 
 export { MemoizedMessageBox as MessageBox };
-
-
-
