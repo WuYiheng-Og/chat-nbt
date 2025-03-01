@@ -34,13 +34,13 @@ function MessageBox ({
         navigator.clipboard.writeText(content).then(() => {
             toast.success('内容已复制到剪贴板', {
                 position: "top-center", // 使用字符串字面量
-                autoClose: 2000 // 2秒后自动关闭
+                autoClose: 1000 // 1秒后自动关闭
             });
         }).catch(err => {
             console.error('复制失败:', err);
             toast.error('复制失败，请重试', {
                 position: "top-center", // 使用字符串字面量
-                autoClose: 2000
+                autoClose: 1000
             });
         });
     };
