@@ -97,8 +97,6 @@ export const SelectModel = () => {
                     </div>
                 </PopoverContent>
             </Popover>
-            <div className="p-10">
-    </div>
         </>
     )
 }
