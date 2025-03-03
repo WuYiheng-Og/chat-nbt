@@ -35,9 +35,6 @@ const Chat = ({ params }: ChatPageProps) => {
         }
     }, [chat, router]);
 
-    if (chat === null) {
-        return null;
-    }
     useEffect(() => {
         // 定义并立即执行一个异步函数
         (async () => {
@@ -62,39 +59,39 @@ const Chat = ({ params }: ChatPageProps) => {
 
     return (
         <SendPendingProvider>
-        <div className="bg-neutral-800 w-full h-full flex flex-col">
-            <Header />
-            {messages===undefined ? (
-                <div className="flex flex-col h-[calc(100vh-60px)] items-center">
-                    <div className="pt-52">
-                        <LoaderCircle className="w-16 h-16 animate-spin" />
-                    </div>
-                </div>
-            ):(
-                <div className="flex flex-col h-[calc(100vh-60px)]">
-                    {messages?.length === 0 ? (
-                        <div className="mx-auto flex flex-col items-center w-full pt-52">
-                            <h2 className="text-xl md:text-3xl font-semibold text-white px-2">
-                            准备好提问了吗？我随时可以开始哦！
-                            </h2>
-                        </div>
-                    ):(
-                        <div className="flex-1 overflow-y-auto">
-                            <Body chatId={chatId} />
-                        </div>
-                    )}
-                    <div className="w-full bg-neutral-800 pt-4">
-                        <Form chatId={chatId} />
-                        <div className="flex w-full items-center justify-center pt-2 pb-4">
-                            <p className="w-full text-center text-xs text-neutral-400">
-                                内容由 AI 生成，请仔细甄别
-                            </p>
+            <div className="bg-neutral-800 w-full h-full flex flex-col">
+                <Header />
+                {messages===undefined ? (
+                    <div className="flex flex-col h-[calc(100vh-60px)] items-center">
+                        <div className="pt-52">
+                            <LoaderCircle className="w-16 h-16 animate-spin" />
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
-      </SendPendingProvider>
+                ):(
+                    <div className="flex flex-col h-[calc(100vh-60px)]">
+                        {messages?.length === 0 ? (
+                            <div className="mx-auto flex flex-col items-center w-full pt-52">
+                                <h2 className="text-xl md:text-3xl font-semibold text-white px-2">
+                                准备好提问了吗？我随时可以开始哦！
+                                </h2>
+                            </div>
+                        ):(
+                            <div className="flex-1 overflow-y-auto">
+                                <Body chatId={chatId} />
+                            </div>
+                        )}
+                        <div className="w-full bg-neutral-800 pt-4">
+                            <Form chatId={chatId} />
+                            <div className="flex w-full items-center justify-center pt-2 pb-4">
+                                <p className="w-full text-center text-xs text-neutral-400">
+                                    内容由 AI 生成，请仔细甄别
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </SendPendingProvider>
     )
 
 
