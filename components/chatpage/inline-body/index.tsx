@@ -28,7 +28,7 @@ export const InlineBody = ({ chatId }: BodyProps) => {
 
     return (
         <ScrollArea className="h-5/6 w-full pr-1">
-            <div className="w-96 h-96 flex flex-col">
+            <div className="w-full h-96 flex flex-col">
                 {messages.map((message, index) => (
                     <div
                         key={message._id}
