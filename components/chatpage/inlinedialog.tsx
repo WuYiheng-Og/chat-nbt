@@ -98,7 +98,7 @@ export const SearchCommand = ({ chatId }: FormProps) => {
       <DialogContent className="p-4 max-w-lg mx-auto bg-neutral-600 rounded-lg shadow-lg">
         <DialogTitle className="text-white">Search</DialogTitle>
         <Command>
-          <div className="relative w-full p-2">
+          <div className="relative w-11/12 p-2">
             <Input
               placeholder="Message TalkGPT..."
               className="w-full h-12 px-4 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:border-r-cyan-50"
