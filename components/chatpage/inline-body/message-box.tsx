@@ -66,7 +66,7 @@ function MessageBox ({
 
     return (
         <>
-            <div className='w-80'>
+            <div className='w-full'>
                 <Avatar className="w-5 h-5 text-white fill-white">
                     <AvatarImage src={imageUrl} className="text-white fill-white" />
                     <AvatarFallback className="text-neutral-900 font-semibold">
@@ -90,7 +90,7 @@ function MessageBox ({
                                 <LoaderCircle className="w-4 h-4 animate-spin" />
                             </div>
                         )}
-                        <div className='w-52'>
+                        <div className='w-full'>
                             <Markdown content={message.content} role={message.role}/>
                             {hasAttachments && (
                                 <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList}/>
