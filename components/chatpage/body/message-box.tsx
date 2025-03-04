@@ -105,11 +105,11 @@ function MessageBox({
                             <button onClick={() => handleCopyClick(message.content)} title="点击复制内容" className="bg-transparent text-white hover:text-gray-400 focus:outline-none">
                                 <CopyIcon size={20} />
                             </button>
-                            {message.role !== "user" && ( // 只对AI消息提供重新生成按钮
-                                <button onClick={handleRegenerateClick} title="点击重新生成" className="bg-transparent text-white hover:text-gray-400 focus:outline-none">
-                                    <RefreshCwIcon size={20} />
-                                </button>
-                            )}
+                            {/*{message.role !== "user" && ( // 只对AI消息提供重新生成按钮*/}
+                            {/*    <button onClick={handleRegenerateClick} title="点击重新生成" className="bg-transparent text-white hover:text-gray-400 focus:outline-none">*/}
+                            {/*        <RefreshCwIcon size={20} />*/}
+                            {/*    </button>*/}
+                            {/*)}*/}
                         </div>
                     </div>
                 </div>
