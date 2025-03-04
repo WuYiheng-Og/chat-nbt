@@ -57,8 +57,8 @@ export const ChatBox = ({
     return (
         <div key={chat.title}
             // 这里cn表示动态css，一方面，hover的chat需要高亮，另一方面，选中的chat也需要高亮。
-            className={cn("relative flex w-full p-2 rounded-md hover:bg-neutral-900 cursor-pointer text-white text-sm justify-between", selected && "bg-neutral-800")}>
-            <div onClick={handleClick} className="w-full">
+            className={cn("relative flex w-full p-2 rounded-md hover:bg-neutral-900 cursor-pointer text-white text-sm justify-between overflow-x-clip", selected && "bg-neutral-800")}>
+            <div onClick={handleClick} className="w-full max-w-[150px]">
                 {isEditing ? (
                     <input
                         type="text"
@@ -69,10 +69,10 @@ export const ChatBox = ({
                         className="outline-none bg-transparent w-[170px]"
                     />
                 ) : (
-                    <div className="truncate max-w-[200px]">{chat.title}</div>
+                    <div className="truncate max-w-[150px]">{chat.title}</div>
                 )}
             </div>
-            <div className="flex z-10">
+            <div className="flex">
                 {isEditing ? (
                     <button onClick={handleRename} className={cn("bg-gradient-to-r from-transparent from-0% to-neutral-900 to-30% pl-3 py-1",
                         selected && "to-neutral-800")}>
