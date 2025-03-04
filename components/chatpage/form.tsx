@@ -33,15 +33,6 @@ export const Form = ({ chatId }: FormProps) => {
 
     // 用于终止聊天
     const abortControllerRef = useRef<AbortController | null>(null);
-    if (chat === undefined) {
-        return null;
-    }
-    if (chat === null) {
-        return <div>Chat not found!</div>
-    }
-    if (user === null) {
-        return <div>User not found!</div>
-    }
 
     // 设置文件加载状态
     const handleFileUploading = (uploadPending:boolean, attachmentMetaInfoList: FormattedFile[])=> {
@@ -91,7 +82,7 @@ export const Form = ({ chatId }: FormProps) => {
             body: JSON.stringify({
                 role: "user",
                 content: temp,
-                chatId: chat._id,
+                chatId: chat?._id,
                 attachmentMetaInfoList: attachmentMetaInfoList,
                 curUser: user!
             }),

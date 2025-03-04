@@ -23,6 +23,12 @@ export const ChatBox = ({
     const [title, setTitle] = useState(chat.title);
 
     const router = useRouter();
+    const storeUser = useMutation(api.users.store);
+
+    const fetch = async () => {
+        const chatId = await storeUser({});
+        router.push(`/chat/${chatId}`)
+    }
 
     // 点击左侧某个chat跳转对应的聊天框
     const handleClick = () => {
@@ -37,9 +43,9 @@ export const ChatBox = ({
     }
     // 删除某个chat，并跳转首页。
     const handleDelete = async() => {
-        router.push('/'); 
         // TODO，此处删除仅仅删除了chat表，没有删除关联的messages
         await remove({ id: chat._id });
+        await fetch();
         
     }
     // const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -51,21 +57,22 @@ export const ChatBox = ({
     return (
         <div key={chat.title}
             // 这里cn表示动态css，一方面，hover的chat需要高亮，另一方面，选中的chat也需要高亮。
-            className={cn("group relative flex w-full p-2 rounded-md hover:bg-neutral-900 cursor-pointer text-white text-sm", selected && "bg-neutral-800")}
-            onClick={handleClick}>
-            {isEditing ? (
-                <input
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    onBlur={handleRename}
-                    autoFocus
-                    className="outline-none bg-transparent w-[170px]"
-                />
-            ) : (
-                <div className="truncate max-w-[200px]">{chat.title}</div>
-            )}
-            <div className="absolute top-1/2 -translate-y-1/2 right-2 flex z-10">
+            className={cn("relative flex w-full p-2 rounded-md hover:bg-neutral-900 cursor-pointer text-white text-sm justify-between", selected && "bg-neutral-800")}>
+            <div onClick={handleClick} className="w-full">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        onBlur={handleRename}
+                        autoFocus
+                        className="outline-none bg-transparent w-[170px]"
+                    />
+                ) : (
+                    <div className="truncate max-w-[200px]">{chat.title}</div>
+                )}
+            </div>
+            <div className="flex z-10">
                 {isEditing ? (
                     <button onClick={handleRename} className={cn("bg-gradient-to-r from-transparent from-0% to-neutral-900 to-30% pl-3 py-1",
                         selected && "to-neutral-800")}>

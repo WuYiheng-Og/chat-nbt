@@ -24,7 +24,7 @@ export const AttachmentPreview = ({
 
 
     return (
-        <div className="flex flex-wrap gap-2 p-2 sm:px-12 md:px-36 lg:pr-[500px] 2xl:px-72 bg-neutral-800">
+        <div className="flex flex-wrap gap-2 p-2 sm:px-12 md:px-36 2xl:px-72 w-full bg-neutral-800">
             {attachments.map((file, index) => (
                 <div key={index} className="flex items-center gap-2 bg-neutral-700 rounded-md p-2">
                     {/* 加载动画 */}

@@ -47,14 +47,13 @@ const AttachmentDisplay: React.FC<AttachmentDisplayProps> = ({ attachmentMetaInf
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div className={`grid gap-4 grid-cols-1
+        ${attachmentMetaInfoList.length == 2 && 'sm:grid-cols-2'} 
+        ${attachmentMetaInfoList.length >= 3 && 'md:grid-cols-3'}`}>
             {attachmentMetaInfoList?.map((attachment, index) => (
                 <div
                     key={index}
-                    className={`bg-white p-2 rounded-md shadow-md 
-                        ${attachmentMetaInfoList.length === 1 && 'col-start-3'}
-                        ${attachmentMetaInfoList.length === 2 && (index === 0 ? 'col-start-2' : 'col-start-3')}`}
-                >
+                    className="bg-white p-2 rounded-md shadow-md">
                     {attachment.type.startsWith('image/')? ( 
                             <img
                                 src={presignedUrls[attachment.key]}
