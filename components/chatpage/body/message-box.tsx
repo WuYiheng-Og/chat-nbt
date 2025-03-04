@@ -2,7 +2,7 @@ import AttachmentDisplay from "@/components/files/AttachmentDisplay";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Doc } from "@/convex/_generated/dataModel";
 import { GPTModel } from "@/lib/types";
-import { CopyIcon, LoaderCircle, RefreshCwIcon } from 'lucide-react';
+import { CopyIcon, LoaderCircle } from 'lucide-react';
 import Image from 'next/image';
 import React from "react";
 import { ToastContainer, toast } from 'react-toastify'; // 导入 toast 和 ToastContainer
@@ -14,7 +14,7 @@ interface MessageBoxProps {
     userImageUrl?: string;
     model?: string;
     isLastMsg?: boolean; // 看是否为最后一个消息
-    onRegenerate?: (messageId: string) => void; // 新增属性，用于触发重新生成
+    // onRegenerate?: (messageId: string) => void; // 新增属性，用于触发重新生成
 }
 
 function MessageBox({
@@ -22,7 +22,7 @@ function MessageBox({
     userImageUrl,
     model,
     isLastMsg,
-    onRegenerate
+    // onRegenerate
 }: MessageBoxProps) {
 
     // 如果 role 是 system，直接返回 null，不渲染
@@ -61,11 +61,11 @@ function MessageBox({
         });
     };
 
-    const handleRegenerateClick = () => {
-        if (onRegenerate) {
-            onRegenerate(message._id); // 触发重新生成，并传递消息ID
-        }
-    };
+    // const handleRegenerateClick = () => {
+    //     if (onRegenerate) {
+    //         onRegenerate(message._id); // 触发重新生成，并传递消息ID
+    //     }
+    // };
 
     return (
         <>
