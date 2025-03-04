@@ -1,14 +1,14 @@
-import * as React from "react";
-import { Command, CommandList, CommandItem } from "cmdk";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { InlineBody } from "@/components/chatpage/inline-body";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { Command, CommandItem, CommandList } from "cmdk";
 import { useQuery } from "convex/react";
-import { useState, useEffect } from "react";
-import { InlineBody } from "@/components/chatpage/inline-body";
+import { Search } from "lucide-react";
+import * as React from "react";
+import { useEffect, useState } from "react";
 
 
 interface FormProps {
@@ -17,7 +17,7 @@ interface FormProps {
 
 export const SearchCommand = ({ chatId }: FormProps) => {
   const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const [message, setMessage] = useState<string>("");
   const [issend, setIssend] = useState<boolean>(false);
 
@@ -59,7 +59,7 @@ export const SearchCommand = ({ chatId }: FormProps) => {
       }),
     });
 
-   
+
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -73,12 +73,12 @@ export const SearchCommand = ({ chatId }: FormProps) => {
   // 搜索结果
   const searchResults = [
     { label: "learn ChatNBT" },
-    { label: "About ChatNBT"},
-    { label: "nextjs+react+convex"},
-    { label: "Environment Variables"},
-    { label: "Functions"},
-    { label: "Fluid Compute"},
-    { label: "github"},
+    { label: "About ChatNBT" },
+    { label: "nextjs+react+convex" },
+    { label: "Environment Variables" },
+    { label: "Functions" },
+    { label: "Fluid Compute" },
+    { label: "github" },
   ].filter((item) => item.label.toLowerCase().includes(search.toLowerCase()));
 
   return (

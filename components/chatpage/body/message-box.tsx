@@ -1,13 +1,13 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Markdown from "./markdown";
-import { Doc } from "@/convex/_generated/dataModel";
 import AttachmentDisplay from "@/components/files/AttachmentDisplay";
-import React from "react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Doc } from "@/convex/_generated/dataModel";
 import { GPTModel } from "@/lib/types";
-import { LoaderCircle, CopyIcon, RefreshCwIcon } from 'lucide-react';
+import { CopyIcon, LoaderCircle, RefreshCwIcon } from 'lucide-react';
+import Image from 'next/image';
+import React from "react";
 import { ToastContainer, toast } from 'react-toastify'; // 导入 toast 和 ToastContainer
 import 'react-toastify/dist/ReactToastify.css'; // 导入样式
-import Image from 'next/image';
+import Markdown from "./markdown";
 
 interface MessageBoxProps {
     message: Doc<"messages">;
@@ -17,13 +17,13 @@ interface MessageBoxProps {
     onRegenerate?: (messageId: string) => void; // 新增属性，用于触发重新生成
 }
 
-function MessageBox ({
-                         message,
-                         userImageUrl,
-                         model,
-                         isLastMsg,
-                         onRegenerate
-                     }: MessageBoxProps) {
+function MessageBox({
+    message,
+    userImageUrl,
+    model,
+    isLastMsg,
+    onRegenerate
+}: MessageBoxProps) {
 
     // 如果 role 是 system，直接返回 null，不渲染
     if (message.role === "system") {
@@ -72,7 +72,7 @@ function MessageBox ({
             <div className={`flex pb-8 ${message.role === "user" ? "flex-row-reverse" : "flex-row"}`}>
                 <Avatar className="w-7 h-7 text-white fill-white">
                     {/*<AvatarImage src={imageUrl} className="text-white fill-white" /> 这个地方用AvatarImage时，AI新消息到来时用户上一条消息的头像每次都重新渲染，会闪一下*/}
-                    <Image src={imageUrl as string} className="text-white fill-white" alt="avatar" width={200} height={200}/>
+                    <Image src={imageUrl as string} className="text-white fill-white" alt="avatar" width={200} height={200} />
                     <AvatarFallback className="text-neutral-900 font-semibold">
                         {nameString[0]}
                     </AvatarFallback>
@@ -95,9 +95,9 @@ function MessageBox ({
                             </div>
                         )}
                         <div className={`flex flex-grow flex-col gap-3 ${message.role === "user" ? "items-end" : "items-start"}`}>
-                            <Markdown content={message.content} role={message.role} ableToShowLoading={isLastMsg??false}/>
+                            <Markdown content={message.content} role={message.role} ableToShowLoading={isLastMsg ?? false} />
                             {hasAttachments && (
-                                <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList}/>
+                                <AttachmentDisplay attachmentMetaInfoList={message.attachmentMetaInfoList} />
                             )}
                         </div>
                         {/* 复制和重新生成按钮 */}
@@ -120,9 +120,9 @@ function MessageBox ({
 };
 
 // 自定义比较函数
-const arePropsEqual = (prevProps: MessageBoxProps, nextProps: MessageBoxProps ) => {
+const arePropsEqual = (prevProps: MessageBoxProps, nextProps: MessageBoxProps) => {
     // 用户的消息不再次渲染了
-    if(nextProps.message.role === 'user') return true;
+    if (nextProps.message.role === 'user') return true;
     return (
         prevProps.message._id === nextProps.message._id &&
         prevProps.message.content === nextProps.message.content &&
@@ -131,6 +131,7 @@ const arePropsEqual = (prevProps: MessageBoxProps, nextProps: MessageBoxProps ) 
 };
 
 // 使用 React.memo 包裹 MessageBox 组件【减少不必要的渲染】
-const MemoizedMessageBox = React.memo(MessageBox, arePropsEqual );
+const MemoizedMessageBox = React.memo(MessageBox, arePropsEqual);
 
 export { MemoizedMessageBox as MessageBox };
+

@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
-import ReactMarkdown from 'react-markdown';
-import { toast } from 'sonner';
-import copy from 'copy-to-clipboard'
+import copy from 'copy-to-clipboard';
+import { Element } from 'hast';
 import { Clipboard } from 'lucide-react';
+import { useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { gruvboxDark } from 'react-syntax-highlighter/dist/cjs/styles/hljs';
+import { toast } from 'sonner';
 // import remarkGfm from 'remark-gfm';
 // import remarkAddClassNameToLastNode from '@/lib/markdown_plugins';
 
@@ -13,54 +14,54 @@ interface MarkdownProps {
     role: "user" | "assistant";
 }
 
-export default function Markdown({ content, role }: MarkdownProps) { 
+export default function Markdown({ content, role }: MarkdownProps) {
     // 合并 content 和图片的 Markdown 语法
     // const combinedContent = `${content}![Big Cat Run](/biga_cat_run.gif)`;
     const handleCopy = (text: string) => {
         copy(text);
-        toast.success("Copied to clipboard."); 
+        toast.success("Copied to clipboard.");
     }
     const lastNodeRef = useRef<HTMLDivElement>(null);
 
-    const isLastNode = (node: any) => {
+    const isLastNode = (node: Element) => {
         console.log(node.children.length)
         return node.position?.end.offset === content.length && node.children.length <= 2 && role === "assistant";
-      };
+    };
 
-    return ( 
+    return (
         <ReactMarkdown
             className='custom-markdown'
             // remarkPlugins={[remarkGfm, remarkAddClassNameToLastNode('last-node')]}
             components={{
                 p: ({ node, children, ...props }) => (
                     <p
-                      ref={isLastNode(node) ? lastNodeRef : null}
-                      className={isLastNode(node) ? 'last-node' : ''}
-                      {...props}
+                        ref={isLastNode(node as Element) ? lastNodeRef : null}
+                        className={isLastNode(node as Element) ? 'last-node' : ''}
+                        {...props}
                     >
-                      {children}
+                        {children}
                     </p>
                 ),
                 li: ({ node, children, ...props }) => (
-                <div ref={isLastNode(node) ? lastNodeRef : null}>
-                    <li
-                    className={isLastNode(node) ? 'last-node' : ''}
-                    {...props}
-                    >
-                    {children}
-                    </li>
-                </div>
+                    <div ref={isLastNode(node as Element) ? lastNodeRef : null}>
+                        <li
+                            className={isLastNode(node as Element) ? 'last-node' : ''}
+                            {...props}
+                        >
+                            {children}
+                        </li>
+                    </div>
                 ),
                 h1: ({ node, children, ...props }) => (
-                <h1
-                    ref={isLastNode(node) ? lastNodeRef : null}
-                    className={isLastNode(node) ? 'last-node' : ''}
-                    {...props}
-                >
-                    {children}
-                </h1>
+                    <h1
+                        ref={isLastNode(node as Element) ? lastNodeRef : null}
+                        className={isLastNode(node as Element) ? 'last-node' : ''}
+                        {...props}
+                    >
+                        {children}
+                    </h1>
                 ),
-                code({className, children, ...props }) {
+                code({ className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || '')
                     return match ? (
                         <div>
@@ -81,10 +82,10 @@ export default function Markdown({ content, role }: MarkdownProps) {
                             {children}
                         </code>
                     )
-                } 
+                }
             }}
         >
             {content}
-        </ReactMarkdown> 
+        </ReactMarkdown>
     )
 } 
